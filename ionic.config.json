@@ -1,0 +1,7 @@
+{
+  "name": "h21cafe-app",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue"
+}
