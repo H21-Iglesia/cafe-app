@@ -2,46 +2,89 @@
   <ion-page>
     <ion-header :translucent="true">
       <ion-toolbar>
-        <ion-title>Inbox</ion-title>
+        <ion-title>CREAR PEDIDO</ion-title>
       </ion-toolbar>
     </ion-header>
     
     <ion-content :fullscreen="true">
-      <ion-refresher slot="fixed" @ionRefresh="refresh($event)">
-        <ion-refresher-content></ion-refresher-content>
-      </ion-refresher>
-      
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">Inbox</ion-title>
-        </ion-toolbar>
-      </ion-header>
-      
+    
       <ion-list>
-        <MessageListItem v-for="message in messages" :key="message.id" :message="message" />
+        <div v-for="producto in productos" :key="producto.id">
+          <item-producto @cantidad="productos[producto.id].cantidad=$event"  :p="producto"></item-producto>
+        </div>
+
       </ion-list>
+
     </ion-content>
+
+    <ion-footer>
+      <ion-toolbar>
+        <br>
+        <ion-title>TOTAL: {{total}} bs</ion-title>
+        <br>
+        <ion-button expand="block" shape="round" color="primary" @click="openToast">PEDIR</ion-button>
+      </ion-toolbar>
+    </ion-footer>
   </ion-page>
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonList, IonPage, IonRefresher, IonRefresherContent, IonTitle, IonToolbar } from '@ionic/vue';
-import MessageListItem from '@/components/MessageListItem.vue';
+import { IonContent, IonHeader, IonList, IonPage,IonTitle, IonToolbar,toastController } from '@ionic/vue';
 import { defineComponent } from 'vue';
-import { getMessages } from '@/data/messages';
+import ItemProducto from '@/components/ItemProducto.vue'
+import { getProductos } from '@/data/productos';
 
 export default defineComponent({
   name: 'HomePage',
   data() {
     return {
-      messages: getMessages()
+      productos: getProductos(),
+      cantidad: 0,
+      pedido: [],
+
     }
   },
   methods: {
-    refresh: (ev: CustomEvent) => {
-      setTimeout(() => {
-        ev.detail.complete();
-      }, 3000);
+    async openToast() {
+      if(this.total>0){
+
+        const toast = await toastController
+          .create({
+            message: 'Pedido completado.',
+            duration: 1000
+          })
+        return toast.present();
+      }else
+      {
+        const toast = await toastController
+          .create({
+            message: 'No hay productos selecionados.',
+            duration: 1000
+          })
+        return toast.present();
+      }
+    },
+    cargarPedido(pedido){
+
+      this.pedido = pedido
+      console.log(this.pedido)
+    },
+  
+  },
+  computed:{
+    total(){
+      var suma = 0
+      var pedido = []
+     for (var i = 0; i < this.productos.length; i++) {
+       suma = suma + ( this.productos[i].cantidad * parseInt(this.productos[i].precio))
+
+       if(this.productos[i].cantidad > 0){
+        pedido.push(this.productos[i])
+       }
+      }
+      this.cargarPedido(pedido)
+
+      return suma
     }
   },
   components: {
@@ -49,11 +92,9 @@ export default defineComponent({
     IonHeader,
     IonList,
     IonPage,
-    IonRefresher,
-    IonRefresherContent,
     IonTitle,
     IonToolbar,
-    MessageListItem
+    ItemProducto
   },
 });
 </script>

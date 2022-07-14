@@ -54,6 +54,12 @@ const messages: Message[] = [
     subject: 'Placeholder Headhots',
     date: 'Last Week',
     id: 7
+  },
+  {
+    fromName: 'Prueba',
+    subject: 'Placeholder Headhots',
+    date: 'Last Week',
+    id: 8
   }
 ];
 
