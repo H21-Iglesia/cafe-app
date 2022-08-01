@@ -5,9 +5,9 @@
             <ion-h2>{{p.nombre}}</ion-h2><br>
             <ion-h3>{{p.precio}} bs</ion-h3>
         </ion-label>
-        <ion-button @click="quitar(p.precio)" >-</ion-button>
+        <ion-button @click="quitar(p.precio)" color="medium" >-</ion-button>
         {{p.cantidad}}
-        <ion-button @click="agregar(p.precio)">+</ion-button>
+        <ion-button @click="agregar(p.precio)" color="medium" >+</ion-button>
 
     </ion-item>
 </template>

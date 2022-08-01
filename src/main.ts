@@ -33,5 +33,5 @@ router.isReady().then(() => {
   app.mount('#app');
 });
 
-app.config.globalProperties.$global = 'hola' ;  
+
 

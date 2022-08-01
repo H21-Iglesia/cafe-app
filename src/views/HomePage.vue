@@ -1,100 +1,63 @@
-<template>
-  <ion-page>
-    <ion-header :translucent="true">
-      <ion-toolbar>
-        <ion-title>CREAR PEDIDO</ion-title>
-      </ion-toolbar>
-    </ion-header>
+<template lang="Es">
+    <ion-page>
+        <ion-header collapse="fade" >
+        <ion-toolbar color="light">
+            <ion-title size="large">Cafeteria h21</ion-title>
+        </ion-toolbar>
+        </ion-header>
+
+        <ion-content>
+
+            <ion-card href="pedir" class="iconos" >
+                <ion-icon  :icon="cartOutline" style="font-size: 80px" color="dark" ></ion-icon>
+                <ion-item  style="text-align: center"  color="light">
+                <ion-label>Crear pedido</ion-label>
+                </ion-item>
+            </ion-card >
+            <ion-card class="iconos" href="#" >
+                <ion-icon :icon="timeOutline" style="font-size: 80px" color="dark" ></ion-icon>
+                <ion-item style="text-align: center" color="light">
+                <ion-label>Pedidos pendientes</ion-label>
+                </ion-item>
+            </ion-card>
+
+            <ion-card class="iconos"  href="#"  >
+                <ion-icon :icon="colorWandOutline" style="font-size: 80px" color="dark"></ion-icon>
+                <ion-item style="text-align: center" color="light">
+                <ion-label>Recetas</ion-label>
+                </ion-item>
+            </ion-card>
+        </ion-content>
+
+    </ion-page>
     
-    <ion-content :fullscreen="true">
-    
-      <ion-list>
-        <div v-for="producto in productos" :key="producto.id">
-          <item-producto @cantidad="productos[producto.id].cantidad=$event"  :p="producto"></item-producto>
-        </div>
 
-      </ion-list>
 
-    </ion-content>
 
-    <ion-footer>
-      <ion-toolbar>
-        <br>
-        <ion-title>TOTAL: {{total}} bs</ion-title>
-        <br>
-        <ion-button expand="block" shape="round" color="primary" @click="openToast">PEDIR</ion-button>
-      </ion-toolbar>
-    </ion-footer>
-  </ion-page>
 </template>
-
 <script lang="ts">
-import { IonContent, IonHeader, IonList, IonPage,IonTitle, IonToolbar,toastController } from '@ionic/vue';
-import { defineComponent } from 'vue';
-import ItemProducto from '@/components/ItemProducto.vue'
-import { getProductos } from '@/data/productos';
+import { cartOutline,timeOutline,colorWandOutline } from "ionicons/icons";
 
-export default defineComponent({
-  name: 'HomePage',
-  data() {
-    return {
-      productos: getProductos(),
-      cantidad: 0,
-      pedido: [],
+export default {
+    name: 'HomePage',
+    components:{
 
-    }
-  },
-  methods: {
-    async openToast() {
-      if(this.total>0){
-
-        const toast = await toastController
-          .create({
-            message: 'Pedido completado.',
-            duration: 1000
-          })
-        return toast.present();
-      }else
-      {
-        const toast = await toastController
-          .create({
-            message: 'No hay productos selecionados.',
-            duration: 1000
-          })
-        return toast.present();
-      }
     },
-    cargarPedido(pedido){
-
-      this.pedido = pedido
-      console.log(this.pedido)
+    data() {
+        return {
+            cartOutline,timeOutline,colorWandOutline
+        
+        }
     },
-  
-  },
-  computed:{
-    total(){
-      var suma = 0
-      var pedido = []
-     for (var i = 0; i < this.productos.length; i++) {
-       suma = suma + ( this.productos[i].cantidad * parseInt(this.productos[i].precio))
-
-       if(this.productos[i].cantidad > 0){
-        pedido.push(this.productos[i])
-       }
-      }
-      this.cargarPedido(pedido)
-
-      return suma
-    }
-  },
-  components: {
-    IonContent,
-    IonHeader,
-    IonList,
-    IonPage,
-    IonTitle,
-    IonToolbar,
-    ItemProducto
-  },
-});
+    methods: {
+        
+    },
+}
 </script>
+<style scoped>
+.iconos{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}    
+</style>

@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
-import HomePage from '../views/HomePage.vue'
+import PedirPage from '../views/PedirPage.vue'
+import HomePage from '../views/HomePage.vue';
+
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -8,14 +10,15 @@ const routes: Array<RouteRecordRaw> = [
     redirect: '/home'
   },
   {
+    path: '/pedir',
+    name: 'Crear Pedido',
+    component: PedirPage
+  },
+  {
     path: '/home',
     name: 'Home',
     component: HomePage
   },
-  {
-    path: '/message/:id',
-    component: () => import('../views/ViewMessagePage.vue')
-  }
 ]
 
 const router = createRouter({
