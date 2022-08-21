@@ -1,19 +1,19 @@
 <template>
   <ion-page>
     <ion-header :translucent="true" >
-      <ion-toolbar color="light">
-          <ion-buttons slot="start">
-            <ion-button href="home"> <ion-icon :icon="arrowBackOutline" ></ion-icon></ion-button>
+      <ion-toolbar color="primary" >
+          <ion-buttons slot="start" >
+            <ion-button href="home" color="warning"> <ion-icon :icon="arrowBackOutline" ></ion-icon></ion-button>
           </ion-buttons>
           <ion-title slot="end" >CREAR PEDIDO</ion-title>
       </ion-toolbar>
     </ion-header>
     
-    <ion-content :fullscreen="true">
+    <ion-content  :fullscreen="true">
     
-      <ion-list>
-        <div v-for="producto in productos" :key="producto.id">
-          <item-producto @cantidad="productos[producto.id].cantidad=$event"  :p="producto"></item-producto>
+      <ion-list >
+        <div  v-for="producto in productos" :key="producto.id">
+          <item-producto @cantidad="productos[producto.id].cantidad=$event"  :p="producto"></item-producto >
         </div>
 
       </ion-list>
@@ -30,7 +30,7 @@
         <ion-title>TOTAL: {{total}} bs</ion-title>
         <br>
 
-        <ion-button expand="block" shape="round" color="dark" @click="openToast">PEDIR</ion-button>
+        <ion-button expand="block" shape="round" color="warning" @click="openToast">PEDIR</ion-button>
       </ion-toolbar>
     </ion-footer>
   </ion-page>

@@ -1,25 +1,36 @@
-<template>
-    <ion-item class="item">
-        <ion-icon :icon="cafe" size="large" class="cafe" color="ligth"></ion-icon>
-        <ion-label>
-            <ion-h2>{{p.nombre}}</ion-h2><br>
-            <ion-h3>{{p.precio}} bs</ion-h3>
-        </ion-label>
-        <ion-button @click="quitar(p.precio)" color="medium" >-</ion-button>
-        {{p.cantidad}}
-        <ion-button @click="agregar(p.precio)" color="medium" >+</ion-button>
+<template >
+        <div class="contenedor">
 
-    </ion-item>
+            <ion-thumbnail slot="start"  >
+                <img class="imagen" src="../images/cafe.jpg" alt="">
+            </ion-thumbnail>
+
+            <ion-item class="item"  fill="outline" lines="none" shape="round"   >
+
+                <ion-label  >
+                    <ion-h2 >{{p.nombre}}</ion-h2><br>
+                    <ion-h3 >{{p.precio}} bs</ion-h3>
+                </ion-label>
+                <ion-button @click="quitar(p.precio)" color="warning" >-</ion-button>
+                    {{p.cantidad}}
+                <ion-button @click="agregar(p.precio)" color="warning" >+</ion-button>
+
+            </ion-item>       
+  
+        </div>
+       
+    
+
+    
 </template>
 <script lang="ts">
 import { defineComponent, } from 'vue'
 import { cafe } from "ionicons/icons";
-import { IonIcon} from '@ionic/vue';
 
 export default defineComponent({
     name: 'ItemProducto',
     components:{
-        IonIcon
+
     },
     props:{
         p:Object,
@@ -52,16 +63,37 @@ export default defineComponent({
 })
 </script>
 <style scoped>
-.cafe{
-    padding-right: 25px; 
-}
+
 .item{
-    padding: 10px;
+    padding: 5px;
+    min-width: 80%;
+    margin-left: 3%;
 }
 .item ion-h2{
     font-size: 18px;
+
 }
 .item ion-h3{
-    color: darkgrey;
+    color: #7F8EA5;
+}
+
+.item ion-button{
+    width: 25px;
+}
+
+.imagen{
+    border-radius: 30%;
+    /* border-bottom-right-radius: 0%;
+    border-top-right-radius: 0%; */
+    margin-top: 20%;
+    min-height: 55px;
+    min-width: 55px;
+
+}
+.contenedor{
+    display: inline-flex;
+    min-width: 100%;
+    margin-left: 4%;
+    margin-right: 5%;
 }
 </style>
