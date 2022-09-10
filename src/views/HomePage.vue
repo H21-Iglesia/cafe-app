@@ -1,7 +1,7 @@
 <template lang="Es">
     <ion-page>
         <ion-header collapse="fade" >
-        <ion-toolbar color="light">
+        <ion-toolbar color="primary">
             <ion-title size="large">Cafeteria h21</ion-title>
         </ion-toolbar>
         </ion-header>
@@ -9,20 +9,20 @@
         <ion-content>
 
             <ion-card href="pedir" class="iconos" >
-                <ion-icon  :icon="cartOutline" style="font-size: 80px" color="dark" ></ion-icon>
+                <ion-icon  :icon="cartOutline" style="font-size: 80px" color="primary" ></ion-icon>
                 <ion-item  style="text-align: center"  color="light">
                 <ion-label>Crear pedido</ion-label>
                 </ion-item>
             </ion-card >
-            <ion-card class="iconos" href="#" >
-                <ion-icon :icon="timeOutline" style="font-size: 80px" color="dark" ></ion-icon>
+            <ion-card class="iconos" href="pendientes" >
+                <ion-icon :icon="timeOutline" style="font-size: 80px" color="primary" ></ion-icon>
                 <ion-item style="text-align: center" color="light">
                 <ion-label>Pedidos pendientes</ion-label>
                 </ion-item>
             </ion-card>
 
             <ion-card class="iconos"  href="#"  >
-                <ion-icon :icon="colorWandOutline" style="font-size: 80px" color="dark"></ion-icon>
+                <ion-icon :icon="colorWandOutline" style="font-size: 80px" color="primary"></ion-icon>
                 <ion-item style="text-align: center" color="light">
                 <ion-label>Recetas</ion-label>
                 </ion-item>

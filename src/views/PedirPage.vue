@@ -3,7 +3,7 @@
     <ion-header :translucent="true" >
       <ion-toolbar color="primary" >
           <ion-buttons slot="start" >
-            <ion-button href="home" color="warning"> <ion-icon :icon="arrowBackOutline" ></ion-icon></ion-button>
+            <ion-button href="home" > <ion-icon :icon="arrowBackOutline" ></ion-icon></ion-button>
           </ion-buttons>
           <ion-title slot="end" >CREAR PEDIDO</ion-title>
       </ion-toolbar>
@@ -23,29 +23,31 @@
     <ion-footer>
       <ion-toolbar color="light">
         <ion-item color="light">
-          <ion-label>Nombre:</ion-label>
-          <ion-input> </ion-input>
+          <ion-label>Nombre: </ion-label>
+          <ion-input @click="$event.target.value = nombre" @IonInput="nombre=$event.target.value"> </ion-input>
         </ion-item>
         <br>
         <ion-title>TOTAL: {{total}} bs</ion-title>
         <br>
 
-        <ion-button expand="block" shape="round" color="warning" @click="openToast">PEDIR</ion-button>
+        <ion-button expand="block" shape="round" color="warning" @click="Pedir">PEDIR</ion-button>
       </ion-toolbar>
     </ion-footer>
   </ion-page>
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonList, IonPage,IonTitle, IonToolbar,toastController } from '@ionic/vue';
+import { IonContent, IonHeader, IonList, IonPage,IonTitle, IonToolbar,toastController, } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import ItemProducto from '@/components/ItemProducto.vue'
-
 import { arrowBackOutline } from "ionicons/icons";
 import { getProductos } from '../data/productos';
 
 export default defineComponent({
   name: 'PedirPage',
+  mounted(){
+    localStorage.setItem("pedidos",JSON.stringify(this.pedidos))
+  },
   data() {
     return {
       arrowBackOutline ,
@@ -53,13 +55,41 @@ export default defineComponent({
       productos: getProductos(),
       cantidad: 0,
       pedido: [],
+      nombre:"",
+      ordenes: {productos:{},cliente:"",estado:true,Nro:0},
+      pedidos:[],
+      NroOrden:0
 
 
     }
   },
   methods: {
-    async openToast() {
-      if(this.total>0){
+    async Pedir() {
+      if(this.total>0 && this.nombre != ""){
+        
+        var pedidos = JSON.parse(localStorage.getItem("pedidos"))
+
+        this.ordenes.productos = this.pedido
+        this.ordenes.cliente = this.nombre
+
+        this.NroOrden++
+        this.ordenes.Nro = this.NroOrden
+        
+        pedidos.push(this.ordenes)
+        
+        localStorage.setItem("pedidos",JSON.stringify(pedidos))
+
+
+        console.log(JSON.parse(localStorage.getItem("pedidos")))
+        console.log(this.pedidos)
+
+        this.cantidad = 0
+        this.nombre = ""
+        this.pedido = []
+
+        for (let i = 0; i < this.productos.length; i++) {
+          this.productos[i].cantidad = 0;
+        }
 
         const toast = await toastController
           .create({
@@ -68,10 +98,10 @@ export default defineComponent({
           })
         return toast.present();
       }else
-              {
+      {
         const toast = await toastController
           .create({
-            message: 'No hay productos selecionados.',
+            message: 'Complete todos los campos',
             duration: 1000
           })
         return toast.present();
@@ -80,7 +110,7 @@ export default defineComponent({
     cargarPedido(pedido){
 
       this.pedido = pedido
-      console.log(this.pedido)
+
     },
   
   },
@@ -92,7 +122,9 @@ export default defineComponent({
        suma = suma + ( this.productos[i].cantidad * parseInt(this.productos[i].precio))
 
        if(this.productos[i].cantidad > 0){
-        pedido.push(this.productos[i])
+        for (let index = 0; index < this.productos[i].cantidad; index++) {
+                pedido.push(this.productos[i])
+        }
        }
       }
       this.cargarPedido(pedido)
@@ -112,5 +144,7 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-
+.input{
+background-color: rgb(196, 196, 196);
+}
 </style>

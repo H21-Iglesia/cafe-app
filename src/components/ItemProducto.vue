@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-mutating-props -->
 <template >
         <div class="contenedor">
 
@@ -11,9 +12,9 @@
                     <ion-h2 >{{p.nombre}}</ion-h2><br>
                     <ion-h3 >{{p.precio}} bs</ion-h3>
                 </ion-label>
-                <ion-button @click="quitar(p.precio)" color="warning" >-</ion-button>
+                <ion-button @click="p.cantidad = p.cantidad - 1 " color="warning" >-</ion-button>
                     {{p.cantidad}}
-                <ion-button @click="agregar(p.precio)" color="warning" >+</ion-button>
+                <ion-button @click="p.cantidad = p.cantidad + 1 " color="warning" >+</ion-button>
 
             </ion-item>       
   
@@ -45,20 +46,7 @@ export default defineComponent({
         }
     },
     methods:{
-        agregar(precio:number){
-            this.cantidad++
-            this.suma = this.suma + Number(precio)
-            this.$emit('cantidad',this.cantidad)
 
-        },
-        quitar(precio:number){
-            if(this.cantidad >0){
-                this.cantidad--
-                this.suma = this.suma - Number(precio)
-                this.$emit('cantidad',this.cantidad)
-
-            }
-        }
     }
 })
 </script>
