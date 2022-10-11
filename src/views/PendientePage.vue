@@ -19,33 +19,31 @@
     <ion-card class="cards" >
   
         <ion-accordion-group v-for="(Pedido, index) in pedidos" :key="index" >
-            <ion-accordion  v-if="Pedido.estado" >
+            <ion-accordion v-if="Pedido.estado_id != 6"  >
                   
                 <ion-item slot="header" value="first" color="light">
                 <ion-card-header >
-                    <ion-card-title color="dark">#0{{Pedido.Nro + " - "+ Pedido.cliente}}</ion-card-title>
+                    <ion-card-title color="dark">#0{{Pedido.id + " - "+ Pedido.nombre_cliente}}</ion-card-title>
                 </ion-card-header>
                 </ion-item>
 
                 <ion-card-content slot="content"  >
-                <ion-item-sliding v-for="(pro, index) in Pedido.productos " :key="index" >
+                <ion-item-sliding v-for="(pro, index) in JSON.parse(Pedido.productos) " :key="index" >
                         <ion-item-options side="end">
-                            <ion-item-option @click="(pro.completado = true); Guardar();">LISTO</ion-item-option>
+                            <ion-item-option @click="(pro.completado = true); GuardarProducto(Pedido.id,pro.id);">LISTO</ion-item-option>
                         </ion-item-options>
 
                         <ion-item v-show="pro.completado == false"  >
-                            <ion-checkbox color="warning"  slot="start" :checked="pro.completado" @click="(pro.completado = true); Guardar();" ></ion-checkbox>
+                            <ion-checkbox color="warning"  slot="start" :checked="pro.completado" @click="(pro.completado = true); GuardarProducto(Pedido.id,Pedido);" ></ion-checkbox>
 
                             <ion-label>{{pro.nombre }}</ion-label> 
-                            <ion-select  placeholder="Pendiente" >
-                                <ion-select-option value="Lucas"  >Lucas</ion-select-option>
-                                <ion-select-option value="Andres">Andres</ion-select-option>
-                                <ion-select-option value="Carla">Carla</ion-select-option>
-                            </ion-select>
+                            <ion-select  placeholder="Pendiente"  >
+                                <ion-select-option v-for="(trabajador, i) in trabajadores" :key="i"  :value="trabajador.nombre" >{{trabajador.nombre}}</ion-select-option>                             
+                            </ion-select> 
                         </ion-item>
                         
                 </ion-item-sliding>
-                <ion-item-sliding  v-for="(pro, index) in Pedido.productos " :key="index" disabled="true">
+                <ion-item-sliding  v-for="(pro, index) in JSON.parse(Pedido.productos) " :key="index" disabled="true">
                         <ion-item-options side="end">
                             <ion-item-option>LISTO</ion-item-option>
                         </ion-item-options>
@@ -54,16 +52,13 @@
                             <ion-checkbox color="warning"  slot="start" :checked="pro.completado" disabled="true"></ion-checkbox>
 
                             <ion-label>{{pro.nombre }}</ion-label> 
-                            <ion-select selected-text="Listo"  placeholder="Pendiente" disabled="true">
-                                <ion-select-option value="Lucas"  >Lucas</ion-select-option>
-                                <ion-select-option value="Andres">Andres</ion-select-option>
-                                <ion-select-option value="Carla">Carla</ion-select-option>
+                            <ion-select selected-text="Listo"  disabled="true">
                             </ion-select>
                         </ion-item>
 
                 </ion-item-sliding>
                         <br>
-                        <ion-button color="warning" expand="block" @click="Pedido.estado = false; Guardar();" >COMPLETADO</ion-button>
+                        <ion-button color="warning" expand="block" @click="Pedido.estado_id = 6; Guardar(Pedido.id,Pedido);" >COMPLETADO</ion-button>
                 </ion-card-content>
     
             </ion-accordion>
@@ -79,23 +74,31 @@
 <script lang="ts">
 import { IonContent, IonHeader, IonPage,IonTitle, IonToolbar } from '@ionic/vue';
 import { defineComponent } from 'vue';
+import {ApiService} from '@/data/Services/ApiService';
 
 import { arrowBackOutline} from "ionicons/icons";
+import axios from 'axios';
 
 
 export default defineComponent({
   name: 'PendientePage',
-
+  mounted(){
+    this.mostrarPedidos()
+  },
   data() {
     return {
       arrowBackOutline ,
-      pedidos: JSON.parse(localStorage.getItem("pedidos")),
+      pedidos: null,
+      // pedidos: JSON.parse(localStorage.getItem("pedidos")),
+      trabajadores: [{nombre: 'Lucas'},{nombre:'Andres'},{nombre:'Carla'}],
+      pedidocopia: null
     }
   },
   methods: {
     Cargar(event: CustomEvent){
-
-        this.pedidos =  JSON.parse(localStorage.getItem("pedidos"))
+      // this.pedidos =ApiService.obtener('pedido')
+        // this.pedidos =  JSON.parse(localStorage.getItem("pedidos"))
+        this.mostrarPedidos()
         console.log(this.pedidos )
 
         console.log('Begin async operation');
@@ -106,9 +109,21 @@ export default defineComponent({
         target.complete();
         }, 500);
     },
-    Guardar(){
-        localStorage.setItem("pedidos",JSON.stringify(this.pedidos))
-    }
+    GuardarProducto(idpedido,pedido){
+      this.pedidocopia = pedido
+      this.pedidocopia.productos = JSON.stringify(pedido.productos)
+      console.log(idpedido,this.pedidocopia,this.pedidos)
+      // ApiService.actualizar('pedido',idpedido,idproducto)
+    },
+    Guardar(id,datos){
+          ApiService.actualizar('pedido',id,datos)
+     
+    },
+    mostrarPedidos(){
+            axios.get('https://apicafe.h21iglesia.org/api/pedido')
+            .then(response => this.pedidos = response.data) 
+            console.log(this.pedidos)
+        }
   },
   computed:{
     

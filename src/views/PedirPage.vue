@@ -30,7 +30,7 @@
         <ion-title>TOTAL: {{total}} bs</ion-title>
         <br>
 
-        <ion-button expand="block" shape="round" color="warning" @click="Pedir">PEDIR</ion-button>
+        <ion-button expand="block" shape="round" color="warning" @click="Pedir2">PEDIR</ion-button>
       </ion-toolbar>
     </ion-footer>
   </ion-page>
@@ -40,8 +40,11 @@
 import { IonContent, IonHeader, IonList, IonPage,IonTitle, IonToolbar,toastController, } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import ItemProducto from '@/components/ItemProducto.vue'
-import { arrowBackOutline } from "ionicons/icons";
+import { arrowBackOutline, map } from "ionicons/icons";
 import { getProductos } from '../data/productos';
+import {LocalService} from '../data/Services/LocalService';
+import {ApiService} from '../data/Services/ApiService';
+import {Orden} from '../data/orden';
 
 export default defineComponent({
   name: 'PedirPage',
@@ -58,8 +61,8 @@ export default defineComponent({
       nombre:"",
       ordenes: {productos:{},cliente:"",estado:true,Nro:0},
       pedidos:[],
-      NroOrden:0
-
+      NroOrden:0,
+      pedidosRutas:"pedidos"
 
     }
   },
@@ -107,11 +110,84 @@ export default defineComponent({
         return toast.present();
       }
     },
+    async Pedir2() {
+      if(this.total<=0 ){
+        return this.Notificar("No hay productos selecionados")
+      }
+      
+      this.GuardarPedidoApi()
+      this.limpiarProductos()
+      this.Notificar("Pedido completado")
+      
+    },
     cargarPedido(pedido){
 
       this.pedido = pedido
 
     },
+    GuardarPedido(){
+      // remplazar local por apiservice
+      var pedidos = LocalService.obtener(this.pedidosRutas)
+      console.log(pedidos)
+      if(typeof pedidos == "object" ){
+        //to do pedidos convertirlos a array 
+        pedidos = Object.entries(pedidos)
+      } 
+      let orden = new Orden(); 
+      //todo crear clase producto.ts y agregar en orden producto this.ordenes.productos = this.pedido
+      // orden.productos = JSON.stringify(this.pedido)
+      orden.nombre_cliente = this.nombre
+
+      this.NroOrden++
+      orden.Nro = this.NroOrden
+        
+      pedidos.push(orden)
+      // remplazar local por apiservice  
+      LocalService.actualizar(this.pedidosRutas,JSON.stringify(pedidos))
+
+
+      console.log(JSON.parse(localStorage.getItem(this.pedidosRutas)))
+      console.log(this.pedidos)
+    },
+    GuardarPedidoApi(){
+
+      let orden = new Orden(); 
+
+      orden.productos = this.pedido.map(function(producto){
+        return producto.id
+      })
+      
+      orden.nombre_cliente = this.nombre
+
+      this.NroOrden++
+      orden.Nro = this.NroOrden
+
+      ApiService.crear('pedido',orden)
+
+      // for (let index = 0; index < orden.productos.length; index++) {
+      //   ApiService.crear('pedido',orden)
+      // }
+
+
+    },
+    limpiarProductos(){
+      
+      this.cantidad = 0
+      this.nombre = ""
+      this.pedido = []
+
+      for (let i = 0; i < this.productos.length; i++) {
+        this.productos[i].cantidad = 0;
+      }
+    },
+    async Notificar(mensaje,duracion = 1000){
+      const toast = await toastController
+        .create({
+          message: mensaje,
+          duration: duracion
+        })
+      return toast.present();
+    }
   
   },
   computed:{
