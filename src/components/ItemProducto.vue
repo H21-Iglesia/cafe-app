@@ -58,11 +58,11 @@ export default defineComponent({
     min-width: 80%;
     margin-left: 3%;
 }
-.item ion-h2{
+.item h2{
     font-size: 18px;
 
 }
-.item ion-h3{
+.item h3{
     color: #7F8EA5;
 }
 
