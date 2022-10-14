@@ -9,8 +9,8 @@
             <ion-item class="item"  fill="outline" lines="none" shape="round"   >
 
                 <ion-label>
-                    <h2>{{p.nombre}}</h2><br>
-                    <h3>{{p.precio}} bs</h3>
+                    <ion-h2>{{p.nombre}}</ion-h2><br>
+                    <ion-h3>{{p.precio}} bs</ion-h3>
                 </ion-label>
                 <ion-button @click="p.cantidad = p.cantidad - 1 " color="warning" >-</ion-button>
                     {{p.cantidad}}
@@ -58,11 +58,11 @@ export default defineComponent({
     min-width: 80%;
     margin-left: 3%;
 }
-.item h2{
+.item ion-h2{
     font-size: 18px;
 
 }
-.item h3{
+.item ion-h3{
     color: #7F8EA5;
 }
 
