@@ -24,7 +24,7 @@
       <ion-toolbar color="light">
         <ion-item color="light">
           <ion-label>Nombre: </ion-label>
-          <ion-input @click="$event.target.value = nombre" @IonInput="nombre=$event.target.value"> </ion-input>
+          <ion-input @click="$event.target.value = nombre" @IonInput="nombre=$event.target.value.toString()"> </ion-input>
         </ion-item>
         <br>
         <ion-title>TOTAL: {{total}} bs</ion-title>
@@ -37,10 +37,10 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonList, IonPage,IonTitle, IonToolbar,toastController,IonButton,IonButtons,IonFooter,IonItem, IonLabel } from '@ionic/vue';
+import { IonContent, IonHeader, IonList, IonPage,IonTitle, IonToolbar,toastController,IonButton,IonButtons,IonFooter,IonItem,IonInput, IonLabel } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import ItemProducto from '@/components/ItemProducto.vue'
-import { arrowBackOutline, map } from "ionicons/icons";
+import { arrowBackOutline } from "ionicons/icons";
 import { getProductos } from '../data/productos';
 import {LocalService} from '../data/Services/LocalService';
 import {ApiService} from '../data/Services/ApiService';
@@ -220,6 +220,7 @@ export default defineComponent({
     IonButtons,
     IonFooter,
     IonItem,
+    IonInput,
     IonLabel
   },
 });
