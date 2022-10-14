@@ -28,13 +28,13 @@
                 </ion-item>
 
                 <ion-card-content slot="content"  >
-                <ion-item-sliding v-for="(pro, index) in JSON.parse(Pedido.productos) " :key="index" >
+                <ion-item-sliding v-for="(pro, index) in Pedido.productos " :key="index" >
                         <ion-item-options side="end">
-                            <ion-item-option @click="(pro.completado = true); GuardarProducto(Pedido.id,pro.id);">LISTO</ion-item-option>
+                            <ion-item-option @click="(pro.completado = true); GuardarProducto(Pedido);">LISTO</ion-item-option>
                         </ion-item-options>
 
                         <ion-item v-show="pro.completado == false"  >
-                            <ion-checkbox color="warning"  slot="start" :checked="pro.completado" @click="(pro.completado = true); GuardarProducto(Pedido.id,Pedido);" ></ion-checkbox>
+                            <ion-checkbox color="warning"  slot="start" :checked="pro.completado" @click="(pro.completado = true); GuardarProducto(Pedido);" ></ion-checkbox>
 
                             <ion-label>{{pro.nombre }}</ion-label> 
                             <ion-select  placeholder="Pendiente"  >
@@ -43,7 +43,7 @@
                         </ion-item>
                         
                 </ion-item-sliding>
-                <ion-item-sliding  v-for="(pro, index) in JSON.parse(Pedido.productos) " :key="index" disabled="true">
+                <ion-item-sliding  v-for="(pro, index) in Pedido.productos " :key="index" disabled="true">
                         <ion-item-options side="end">
                             <ion-item-option>LISTO</ion-item-option>
                         </ion-item-options>
@@ -78,6 +78,7 @@ import {ApiService} from '@/data/Services/ApiService';
 
 import { arrowBackOutline} from "ionicons/icons";
 import axios from 'axios';
+import { Producto } from '@/data/Producto';
 
 
 export default defineComponent({
@@ -109,10 +110,9 @@ export default defineComponent({
         target.complete();
         }, 500);
     },
-    GuardarProducto(idpedido,pedido){
-      this.pedidocopia = pedido
-      this.pedidocopia.productos = JSON.stringify(pedido.productos)
-      console.log(idpedido,this.pedidocopia,this.pedidos)
+    GuardarProducto(pedido){
+     
+      console.log(pedido)
       // ApiService.actualizar('pedido',idpedido,idproducto)
     },
     Guardar(id,datos){
@@ -121,9 +121,32 @@ export default defineComponent({
     },
     mostrarPedidos(){
             axios.get('https://apicafe.h21iglesia.org/api/pedido')
-            .then(response => this.pedidos = response.data) 
-            console.log(this.pedidos)
-        }
+            .then(this.CargarProductos) 
+    },
+    CargarProductos(response){
+      axios.get('https://apicafe.h21iglesia.org/api/producto')
+      .then(Productos => this.traerProductos(response,Productos.data)) 
+    },
+    traerProductos(response,listaPro){
+      let pedidos = []
+
+      response.data.forEach(pedido => {
+        let productos = []
+    
+        pedido.productos.forEach(producto => {
+          const pedidoProductoId = producto.id
+          producto = listaPro.find(p => p.id == producto.id)
+          producto.id = pedidoProductoId
+          productos.push(producto)
+        });
+        pedido.productos = productos
+        pedidos.push(pedido)
+      });
+      this.pedidos = pedidos
+      console.log(this.pedidos)
+    },
+
+
   },
   computed:{
     
