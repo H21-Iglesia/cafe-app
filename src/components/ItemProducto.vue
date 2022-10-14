@@ -9,8 +9,8 @@
             <ion-item class="item"  fill="outline" lines="none" shape="round"   >
 
                 <ion-label  >
-                    <ion-h2 >{{p.nombre}}</ion-h2><br>
-                    <ion-h3 >{{p.precio}} bs</ion-h3>
+                    <h2 >{{p.nombre}}</h2><br>
+                    <h3 >{{p.precio}} bs</h3>
                 </ion-label>
                 <ion-button @click="p.cantidad = p.cantidad - 1 " color="warning" >-</ion-button>
                     {{p.cantidad}}
@@ -25,13 +25,14 @@
     
 </template>
 <script lang="ts">
+import {  IonButton,IonItem, IonLabel,IonThumbnail, } from '@ionic/vue';
 import { defineComponent, } from 'vue'
 import { cafe } from "ionicons/icons";
 
 export default defineComponent({
     name: 'ItemProducto',
     components:{
-
+        IonButton,IonItem, IonLabel,IonThumbnail
     },
     props:{
         p:Object,
