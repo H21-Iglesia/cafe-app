@@ -37,7 +37,7 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonList, IonPage,IonTitle, IonToolbar,toastController, } from '@ionic/vue';
+import { IonContent, IonHeader, IonList, IonPage,IonTitle, IonToolbar,toastController,IonButton,IonButtons,IonFooter,IonItem, IonLabel } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import ItemProducto from '@/components/ItemProducto.vue'
 import { arrowBackOutline, map } from "ionicons/icons";
@@ -215,7 +215,12 @@ export default defineComponent({
     IonPage,
     IonTitle,
     IonToolbar,
-    ItemProducto
+    ItemProducto,
+    IonButton,
+    IonButtons,
+    IonFooter,
+    IonItem,
+    IonLabel
   },
 });
 </script>
