@@ -37,11 +37,14 @@
 </template>
 <script lang="ts">
 import { cartOutline,timeOutline,colorWandOutline } from "ionicons/icons";
+import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle,IonItem, IonLabel,IonHeader,IonToolbar,IonContent,IonPage} from '@ionic/vue';
+import { defineComponent } from 'vue';
 
-export default {
+export default defineComponent( {
     name: 'HomePage',
     components:{
-
+        IonButton,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle,IonItem, IonLabel,IonHeader,IonToolbar,IonContent,IonPage
+        
     },
     data() {
         return {
@@ -52,7 +55,7 @@ export default {
     methods: {
         
     },
-}
+})
 </script>
 <style scoped>
 .iconos{
