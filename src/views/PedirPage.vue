@@ -1,6 +1,6 @@
 <template>
   <ion-page color="light">
-    <ion-header>
+    <ion-header mode="md">
       <ion-toolbar color="primary">
         <ion-buttons slot="start">
           <ion-button href="home">
@@ -22,7 +22,7 @@
 
     </ion-content>
 
-    <ion-footer>
+    <ion-footer mode="md">
       <ion-toolbar color="light">
         <ion-item color="light">
           <ion-label>Nombre: </ion-label>
