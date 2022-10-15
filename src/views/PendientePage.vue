@@ -43,16 +43,16 @@
                         </ion-item>
                         
                 </ion-item-sliding>
-                <ion-item-sliding  v-for="(pro, index) in Pedido.productos " :key="index" disabled="true">
+                <ion-item-sliding  v-for="(pro, index) in Pedido.productos " :key="index" @disabled="true">
                         <ion-item-options side="end">
                             <ion-item-option>LISTO</ion-item-option>
                         </ion-item-options>
 
                         <ion-item color="medium" v-if="pro.completado" >
-                            <ion-checkbox color="warning"  slot="start" :checked="pro.completado" disabled="true"></ion-checkbox>
+                            <ion-checkbox color="warning"  slot="start" :checked="pro.completado" @disabled="true"></ion-checkbox>
 
                             <ion-label>{{pro.nombre }}</ion-label> 
-                            <ion-select selected-text="Listo"  disabled="true">
+                            <ion-select selected-text="Listo"  @disabled="true">
                             </ion-select>
                         </ion-item>
 
@@ -72,7 +72,9 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonPage,IonTitle, IonToolbar } from '@ionic/vue';
+import { IonContent, IonHeader, IonPage,IonTitle, IonToolbar,IonButton,IonButtons,IonItem, IonLabel , IonCard, IonCardContent, IonCardHeader,
+   IonCardTitle, IonItemOption, IonItemOptions, IonItemSliding,IonRefresher, IonRefresherContent,IonSelect, IonSelectOption,IonAccordion, 
+    IonAccordionGroup,IonCheckbox} from '@ionic/vue';
 import { defineComponent } from 'vue';
 import {ApiService} from '@/data/Services/ApiService';
 
@@ -152,11 +154,8 @@ export default defineComponent({
     
   },
   components: {
-    IonContent,
-    IonHeader,
-    IonPage,
-    IonTitle,
-    IonToolbar,
+    IonContent, IonHeader, IonPage,IonTitle, IonToolbar,IonButton,IonButtons,IonItem, IonLabel, IonCard, IonCardContent, IonCardHeader, IonCardTitle,IonItemOption, IonItemOptions, IonItemSliding
+    ,IonRefresher, IonRefresherContent,IonSelect, IonSelectOption,IonAccordion,IonAccordionGroup,IonCheckbox
   }
 });
 </script>

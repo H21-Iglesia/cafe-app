@@ -40,7 +40,6 @@ export default defineComponent({
     data(){
         return{
             cafe,
-
             cantidad: 0,
             suma: 0,
 
@@ -72,8 +71,6 @@ export default defineComponent({
 
 .imagen{
     border-radius: 30%;
-    /* border-bottom-right-radius: 0%;
-    border-top-right-radius: 0%; */
     margin-top: 20%;
     min-height: 55px;
     min-width: 55px;
