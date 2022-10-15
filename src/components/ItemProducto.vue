@@ -12,7 +12,7 @@
                     <ion-h2>{{p.nombre}}</ion-h2><br>
                     <ion-h3>{{p.precio}} bs</ion-h3>
                 </ion-label>
-                <ion-button @click="{ if(p.cantidad > 0){p.cantidad = p.cantidad - 1}} " color="warning" >-</ion-button>
+                <ion-button @click="p.cantidad = p.cantidad - 1" color="warning" >-</ion-button>
                     {{p.cantidad}}
                 <ion-button @click="p.cantidad = p.cantidad + 1 " color="warning" >+</ion-button>
 
