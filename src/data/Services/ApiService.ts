@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const url = 'http://localhost:8000/api/';
+const url = 'https://apicafe.h21iglesia.org/api/';
 
 export const ApiService = {
     async obtener(key: string) {
