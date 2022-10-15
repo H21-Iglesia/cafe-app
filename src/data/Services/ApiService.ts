@@ -1,17 +1,19 @@
 import axios from 'axios';
 
+const url = 'http://localhost:8000/api/';
+
 export const ApiService = {
-    obtener(key: string) {
-        let datos : object
-        axios.get('https://apicafe.h21iglesia.org/api/'+ key)
-        .then(function (response) {
-          datos = response.data
-          console.log(response.data);
-        })
-        return datos
+    async obtener(key: string) {
+    try {
+        const response = await axios.get(url + key);
+        console.log('response',response.data)
+        return response.data 
+    } catch (error) {
+        console.error(error);
+    }
     },
     actualizar(key:string,id:string,item: any) {
-        axios.put('https://apicafe.h21iglesia.org/api/'+ key +'/'+ id ,item)
+        axios.put(url+ key +'/'+ id ,item)
           .then(function (response) {
             console.log(response);
           })
@@ -20,7 +22,7 @@ export const ApiService = {
           });
     },
     crear(key:string ,item: object){
-        axios.post('https://apicafe.h21iglesia.org/api/'+ key ,item)
+        axios.post(url+ key ,item)
           .then(function (response) {
             console.log(response);
           })

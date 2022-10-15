@@ -53,16 +53,18 @@ export default defineComponent({
   name: 'PedirPage',
   mounted() {
     localStorage.setItem("pedidos", JSON.stringify(this.pedidos))
+    this.CargarProductos()
   },
   data() {
     return {
       arrowBackOutline,
 
-      productos: getProductos(),
+      // productos: getProductos(),
+      productos:this.CargarProductos(),
       cantidad: 0,
       pedido: [],
       nombre: "",
-      ordenes: { productos: {}, cliente: "", estado: true, Nro: 0 },
+      ordenes: { productos: {}, cliente: "", estado: true,  },
       pedidos: [],
       NroOrden: 0,
       pedidosRutas: "pedidos"
@@ -78,9 +80,6 @@ export default defineComponent({
         this.ordenes.productos = this.pedido
         this.ordenes.cliente = this.nombre
 
-        this.NroOrden++
-        this.ordenes.Nro = this.NroOrden
-
         pedidos.push(this.ordenes)
 
         localStorage.setItem("pedidos", JSON.stringify(pedidos))
@@ -93,7 +92,7 @@ export default defineComponent({
         this.nombre = ""
         this.pedido = []
 
-        for (let i = 0; i < this.productos.length; i++) {
+        for (let i = 0; i < Object.entries(this.productos).length; i++) {
           this.productos[i].cantidad = 0;
         }
 
@@ -141,7 +140,7 @@ export default defineComponent({
       orden.nombre_cliente = this.nombre
 
       this.NroOrden++
-      orden.Nro = this.NroOrden
+
 
       pedidos.push(orden)
       // remplazar local por apiservice  
@@ -162,7 +161,7 @@ export default defineComponent({
       orden.nombre_cliente = this.nombre
 
       this.NroOrden++
-      orden.Nro = this.NroOrden
+
 
       ApiService.crear('pedido', orden)
 
@@ -178,7 +177,7 @@ export default defineComponent({
       this.nombre = ""
       this.pedido = []
 
-      for (let i = 0; i < this.productos.length; i++) {
+      for (let i = 0; i < Object.entries(this.productos).length; i++) {
         this.productos[i].cantidad = 0;
       }
     },
@@ -189,6 +188,9 @@ export default defineComponent({
           duration: duracion
         })
       return toast.present();
+    },
+    async CargarProductos(){
+      this.productos = await ApiService.obtener('producto')
     }
 
   },
@@ -196,10 +198,10 @@ export default defineComponent({
     total() {
       var suma = 0
       var pedido = []
-      for (var i = 0; i < this.productos.length; i++) {
+      for (var i = 0; i < Object.entries(this.productos).length; i++) {
 
         if (this.productos[i].cantidad > 0) {
-          suma = suma + ((this.productos[i].cantidad) * parseInt(this.productos[i].precio))
+          suma = suma + ((this.productos[i].cantidad) * parseInt(this.productos[i].costo))
         }
         if (this.productos[i].cantidad > 0) {
           for (let index = 0; index < this.productos[i].cantidad; index++) {
