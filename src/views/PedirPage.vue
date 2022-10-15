@@ -1,6 +1,6 @@
 <template>
   <ion-page color="light">
-    <ion-header :translucent="true">
+    <ion-header>
       <ion-toolbar color="primary">
         <ion-buttons slot="start">
           <ion-button href="home">

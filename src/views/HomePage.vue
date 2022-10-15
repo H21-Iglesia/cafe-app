@@ -1,6 +1,6 @@
 <template lang="Es">
     <ion-page>
-        <ion-header>
+        <ion-header mode="md">
         <ion-toolbar color="primary">
             <ion-title size="large">Cafeteria h21</ion-title>
         </ion-toolbar>
