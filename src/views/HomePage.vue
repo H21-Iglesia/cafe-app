@@ -1,6 +1,6 @@
 <template lang="Es">
     <ion-page>
-        <ion-header collapse="fade" >
+        <ion-header>
         <ion-toolbar color="primary">
             <ion-title size="large">Cafeteria h21</ion-title>
         </ion-toolbar>
@@ -44,7 +44,6 @@ export default defineComponent( {
     name: 'HomePage',
     components:{
         IonButton,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle,IonItem, IonLabel,IonHeader,IonToolbar,IonContent,IonPage
-        
     },
     data() {
         return {
