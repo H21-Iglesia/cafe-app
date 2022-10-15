@@ -92,7 +92,6 @@ export default defineComponent({
     return {
       arrowBackOutline ,
       pedidos: null,
-      // pedidos: JSON.parse(localStorage.getItem("pedidos")),
       trabajadores: [{nombre: 'Lucas'},{nombre:'Andres'},{nombre:'Carla'}],
       pedidocopia: null
     }
