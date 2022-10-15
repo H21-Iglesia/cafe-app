@@ -44,8 +44,6 @@ import { IonContent, IonHeader, IonList, IonPage, IonTitle, IonToolbar, toastCon
 import { defineComponent } from 'vue';
 import ItemProducto from '@/components/ItemProducto.vue'
 import { arrowBackOutline } from "ionicons/icons";
-import { getProductos } from '../data/productos';
-import { LocalService } from '../data/Services/LocalService';
 import { ApiService } from '../data/Services/ApiService';
 import { Orden } from '../data/orden';
 
@@ -59,12 +57,11 @@ export default defineComponent({
     return {
       arrowBackOutline,
 
-      // productos: getProductos(),
-      productos:this.CargarProductos(),
+      productos: this.CargarProductos(),
       cantidad: 0,
       pedido: [],
       nombre: "",
-      ordenes: { productos: {}, cliente: "", estado: true,  },
+      ordenes: { productos: {}, cliente: "", estado: true, },
       pedidos: [],
       NroOrden: 0,
       pedidosRutas: "pedidos"
@@ -126,30 +123,6 @@ export default defineComponent({
       this.pedido = pedido
 
     },
-    GuardarPedido() {
-      // remplazar local por apiservice
-      var pedidos = LocalService.obtener(this.pedidosRutas)
-      console.log(pedidos)
-      if (typeof pedidos == "object") {
-        //to do pedidos convertirlos a array 
-        pedidos = Object.entries(pedidos)
-      }
-      let orden = new Orden();
-      //todo crear clase producto.ts y agregar en orden producto this.ordenes.productos = this.pedido
-      // orden.productos = JSON.stringify(this.pedido)
-      orden.nombre_cliente = this.nombre
-
-      this.NroOrden++
-
-
-      pedidos.push(orden)
-      // remplazar local por apiservice  
-      LocalService.actualizar(this.pedidosRutas, JSON.stringify(pedidos))
-
-
-      console.log(JSON.parse(localStorage.getItem(this.pedidosRutas)))
-      console.log(this.pedidos)
-    },
     GuardarPedidoApi() {
 
       let orden = new Orden();
@@ -164,11 +137,6 @@ export default defineComponent({
 
 
       ApiService.crear('pedido', orden)
-
-      // for (let index = 0; index < orden.productos.length; index++) {
-      //   ApiService.crear('pedido',orden)
-      // }
-
 
     },
     limpiarProductos() {
@@ -189,7 +157,7 @@ export default defineComponent({
         })
       return toast.present();
     },
-    async CargarProductos(){
+    async CargarProductos() {
       this.productos = await ApiService.obtener('producto')
     }
 
