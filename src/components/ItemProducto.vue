@@ -82,4 +82,7 @@ export default defineComponent({
     margin-left: 4%;
     margin-right: 5%;
 }
+ion-item {
+    --border-radius: 20px;
+  }
 </style>
