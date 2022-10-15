@@ -1,6 +1,5 @@
 <template>
   <ion-page color="light">
-    <ion-content Type="light">
     <ion-header :translucent="true">
       <ion-toolbar color="primary">
         <ion-buttons slot="start">
@@ -37,7 +36,6 @@
         <ion-button expand="block" shape="round" color="warning" @click="Pedir2">PEDIR</ion-button>
       </ion-toolbar>
     </ion-footer>
-  </ion-content>
   </ion-page>
 </template>
 
