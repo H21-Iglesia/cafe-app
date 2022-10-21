@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
 import PedirPage from '../views/PedirPage.vue'
 import PendientePage from '../views/PendientePage.vue'
+import ProductosPage from '../views/ProductosPage.vue'
 import HomePage from '../views/HomePage.vue';
 
 
@@ -24,6 +25,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/pendientes',
     name: 'Pedidos Pendientes',
     component: PendientePage
+  },
+  {
+    path: '/productos',
+    name: 'Agregrar productos',
+    component: ProductosPage
   },
 ]
 

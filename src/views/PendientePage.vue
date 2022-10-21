@@ -3,7 +3,7 @@
     <ion-header mode="md">
       <ion-toolbar color="primary">
         <ion-buttons slot="start">
-          <ion-button href="home">
+          <ion-button router-link="/home" router-direction="back">
             <ion-icon :icon="arrowBackOutline"></ion-icon>
           </ion-button>
         </ion-buttons>
@@ -29,7 +29,7 @@
               </ion-card-header>
             </ion-item>
 
-            <ion-card-content slot="content">
+            <ion-card-content slot="content" mode="md">
               <ion-item-sliding v-for="(detalle, index) in Pedido.pedido_detalle " :key="index">
                 <ion-item-options side="end">
                   <ion-item-option @click="(detalle.completado = true); GuardarProducto(detalle);">LISTO
@@ -41,7 +41,7 @@
                     @click="(detalle.completado = true); GuardarProducto(detalle);"></ion-checkbox>
 
                   <ion-label>{{detalle.producto.nombre }}</ion-label>
-                  <ion-select :selectedText=detalle.preparo
+                  <ion-select :selectedText=detalle.preparo 
                     @ionChange="GuaradarSelectTrabajador($event.detail.value,detalle)">
                     <ion-select-option v-for="(trabajador, i) in trabajadores" :key="i" :value="trabajador.nombre">
                       {{trabajador.nombre}}</ion-select-option>
