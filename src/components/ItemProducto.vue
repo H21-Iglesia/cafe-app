@@ -3,7 +3,7 @@
         <div class="contenedor">
 
             <ion-thumbnail slot="start"  >
-                <img class="imagen" src="../images/cafe.jpg" alt="">
+                <img class="imagen" :src="'https://apicafe.h21iglesia.org/images/'+ p.foto" alt="foto de producto">
             </ion-thumbnail>
 
             <ion-item class="item"  fill="outline" lines="none" shape="round"   >

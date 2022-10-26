@@ -15,7 +15,7 @@
         <div v-for="producto in productos" :key="producto.id">
             <ion-item fill="outline"  shape="round" lines="none"  >
                 <ion-thumbnail slot="start"   >
-                    <img class="imagen" src="../images/cafe.jpg" alt="">
+                    <img class="imagen" :src="'https://apicafe.h21iglesia.org/images/'+ producto.foto" alt="">
                 </ion-thumbnail>
                 <ion-label>{{producto.nombre}}</ion-label>
                 <ion-button @click="AbrirEditarModal(producto)" color="tertiary">Editar</ion-button>

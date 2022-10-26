@@ -13,7 +13,7 @@
     <ion-content class="ion-padding">
       <ion-item>
         <ion-label position="stacked">Nombre</ion-label>
-        <ion-input v-model="nombre" placeholder="Nombre del producto"></ion-input>
+        <ion-input v-model="nombre" placeholder="Nombre del producto" :autofocus="true"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label position="stacked">Precio</ion-label>
@@ -23,9 +23,9 @@
         <ion-label position="stacked">Receta</ion-label>
         <ion-input v-model="receta_id" placeholder="selecionar receta"></ion-input>
       </ion-item>
-      <ion-item disabled>
+      <ion-item >
         <ion-label position="stacked">Foto</ion-label>
-        <ion-input v-model="foto" placeholder="Agregar foto"></ion-input>
+        <input type="file" @change="guardarImagen" ref="fileinput" style=""  />
       </ion-item>
     </ion-content>
   </template>
@@ -42,21 +42,35 @@
       IonLabel,
       IonInput,
       modalController,
+      // IonImg,
+      // IonThumbnail
     } from '@ionic/vue';
     import { defineComponent } from 'vue';
   
     export default defineComponent({
       name: 'AgregarModal',
-      components: { IonContent, IonHeader, IonTitle, IonToolbar, IonButtons, IonButton, IonItem, IonLabel, IonInput },
+      components: { IonContent, IonHeader, IonTitle, IonToolbar, IonButtons, IonButton, IonItem, IonLabel, IonInput,  },
       data(){
         return{
             nombre:"",
             costo:0,
             receta_id:1,
-            foto:null
+            foto:null,
+            imagenSeleccionada:null
         }
       },
       methods: {
+        guardarImagen(event){
+          this.imagenSeleccionada = event.target.files[0]
+          console.log("imagenselect",this.imagenSeleccionada)
+
+          const fd = new FormData();
+          fd.append('image',this.imagenSeleccionada,this.imagenSeleccionada.name)
+          this.foto = fd
+
+          console.log(this.foto)
+
+        },
         cancel() {
           return modalController.dismiss(null, 'cancel');
         },
