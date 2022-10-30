@@ -68,8 +68,15 @@ export default defineComponent( {
         const { data, role } = await modal.onWillDismiss();
         
         if (role === 'confirm') {
-          ApiService.crear('producto',data)
-          console.log(data)
+          const fd = new FormData();
+
+          fd.append('foto',data.foto)
+          fd.append('nombre',data.nombre)
+          fd.append('costo',data.costo)
+          fd.append('receta_id',data.receta_id)
+
+          ApiService.crear('producto',fd)
+          console.log(fd)
         }
         },
         async AbrirEditarModal(producto) {
@@ -83,8 +90,16 @@ export default defineComponent( {
         const { data, role } = await modal.onWillDismiss();
         
         if (role === 'confirm') {
-          ApiService.actualizar('producto',data.id,data)
-          console.log(data)
+          const fd = new FormData();
+
+          fd.append('id',data.id)
+          fd.append('foto',data.foto)
+          fd.append('nombre',data.nombre)
+          fd.append('costo',data.costo)
+          fd.append('receta_id',data.receta_id)
+
+          ApiService.actualizar('producto',data.id,fd)
+          console.log(fd)
         }
         this.TraerProductos()
         },

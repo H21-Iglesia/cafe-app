@@ -23,9 +23,15 @@
         <ion-label position="stacked">Receta</ion-label>
         <ion-input v-model="receta_id" placeholder="selecionar receta"></ion-input>
       </ion-item>
-      <ion-item disabled>
+      <ion-item>
+        <ion-thumbnail slot="start" v-if="!imagenSeleccionada" >
+          <ion-img class="imagen" :src="'https://apicafe.h21iglesia.org/images/'+foto"/>
+        </ion-thumbnail>
+        <ion-thumbnail slot="start" v-if="imagenSeleccionada" >
+          <ion-img class="imagen" :src="imagen"/>
+        </ion-thumbnail>
         <ion-label position="stacked">Foto</ion-label>
-        <ion-input v-model="foto" placeholder="Agregar foto"></ion-input>
+        <input type="file" @change="guardarImagen" ref="fileinput" style=""  />
       </ion-item>
     </ion-content>
   </template>
@@ -42,12 +48,14 @@
       IonLabel,
       IonInput,
       modalController,
+      IonThumbnail,
+      IonImg
     } from '@ionic/vue';
     import { defineComponent } from 'vue';
   
     export default defineComponent({
       name: 'EditarModal',
-      components: { IonContent, IonHeader, IonTitle, IonToolbar, IonButtons, IonButton, IonItem, IonLabel, IonInput },
+      components: { IonContent, IonHeader, IonTitle, IonToolbar, IonButtons, IonButton, IonItem, IonLabel, IonInput,IonImg,IonThumbnail },
       props:{
         producto:Object,
     },
@@ -57,10 +65,26 @@
             nombre:this.producto.nombre,
             costo:this.producto.costo,
             receta_id:this.producto.receta_id,
-            foto:this.producto.foto
+            foto:this.producto.foto,
+            imagenSeleccionada:null
         }
       },
       methods: {
+        guardarImagen(event){
+          this.foto = event.target.files[0]
+
+          this.cargarImagen(this.foto)
+
+        },
+        cargarImagen(file){
+          let reader = new FileReader();
+
+          reader.onload = (e) =>{
+            this.imagenSeleccionada = e.target.result;
+          }
+
+          reader.readAsDataURL(file)
+        },
         cancel() {
           return modalController.dismiss(null, 'cancel');
         },
@@ -68,5 +92,15 @@
           return modalController.dismiss({id:this.id,nombre:this.nombre,costo:this.costo,receta_id:this.receta_id,foto:this.foto}, 'confirm');
         },
       },
+      computed:{
+        imagen(){
+          return this.imagenSeleccionada;
+        }
+      }
     });
   </script>
+    <style scoped>
+    .imagen{
+      border-radius: 30%;
+    }
+    </style>

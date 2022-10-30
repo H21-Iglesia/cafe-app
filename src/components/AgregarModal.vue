@@ -24,9 +24,13 @@
         <ion-input v-model="receta_id" placeholder="selecionar receta"></ion-input>
       </ion-item>
       <ion-item >
+        <ion-thumbnail slot="start" v-if="imagenSeleccionada"  >
+          <ion-img class="imagen" :src="imagen"/>
+        </ion-thumbnail>
         <ion-label position="stacked">Foto</ion-label>
         <input type="file" @change="guardarImagen" ref="fileinput" style=""  />
       </ion-item>
+
     </ion-content>
   </template>
   
@@ -41,15 +45,15 @@
       IonItem,
       IonLabel,
       IonInput,
+      IonImg,
       modalController,
-      // IonImg,
-      // IonThumbnail
+      IonThumbnail
     } from '@ionic/vue';
     import { defineComponent } from 'vue';
   
     export default defineComponent({
       name: 'AgregarModal',
-      components: { IonContent, IonHeader, IonTitle, IonToolbar, IonButtons, IonButton, IonItem, IonLabel, IonInput,  },
+      components: { IonContent, IonHeader, IonTitle, IonToolbar, IonButtons, IonButton, IonItem, IonLabel, IonInput,IonThumbnail,IonImg  },
       data(){
         return{
             nombre:"",
@@ -61,15 +65,19 @@
       },
       methods: {
         guardarImagen(event){
-          this.imagenSeleccionada = event.target.files[0]
-          console.log("imagenselect",this.imagenSeleccionada)
+          this.foto = event.target.files[0]
+          
+          this.cargarImagen(this.foto)
 
-          const fd = new FormData();
-          fd.append('image',this.imagenSeleccionada,this.imagenSeleccionada.name)
-          this.foto = fd
+        },
+        cargarImagen(file){
+          let reader = new FileReader();
 
-          console.log(this.foto)
+          reader.onload = (e) =>{
+            this.imagenSeleccionada = e.target.result;
+          }
 
+          reader.readAsDataURL(file)
         },
         cancel() {
           return modalController.dismiss(null, 'cancel');
@@ -78,5 +86,15 @@
           return modalController.dismiss({nombre:this.nombre,costo:this.costo,receta_id:this.receta_id,foto:this.foto,cantidad:0}, 'confirm');
         },
       },
+      computed:{
+        imagen(){
+          return this.imagenSeleccionada;
+        }
+      }
     });
   </script>
+  <style scoped>
+  .imagen{
+    border-radius: 30%;
+  }
+  </style>
