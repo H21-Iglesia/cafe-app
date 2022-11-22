@@ -11,7 +11,7 @@
       </ion-toolbar>
     </ion-header>
 
-    <ion-content :fullscreen="true"  >
+    <ion-content :fullscreen="true" mode="ios"  >
         <div v-for="producto in productos" :key="producto.id">
             <ion-item fill="outline"  shape="round" lines="none"  >
                 <ion-thumbnail slot="start"   >
@@ -93,12 +93,13 @@ export default defineComponent( {
           const fd = new FormData();
 
           fd.append('id',data.id)
-          fd.append('foto',data.foto)
           fd.append('nombre',data.nombre)
           fd.append('costo',data.costo)
           fd.append('receta_id',data.receta_id)
+          fd.append('foto',data.foto)
 
           ApiService.actualizar('producto',data.id,fd)
+          console.log("data",data)
           console.log(fd)
         }
         this.TraerProductos()
