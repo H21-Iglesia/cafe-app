@@ -74,10 +74,11 @@ export default defineComponent( {
           fd.append('nombre',data.nombre)
           fd.append('costo',data.costo)
           fd.append('receta_id',data.receta_id)
-
+        
           ApiService.crear('producto',fd)
           console.log(fd)
         }
+        this.TraerProductos()             
         },
         async AbrirEditarModal(producto) {
         console.log(producto)
@@ -91,14 +92,14 @@ export default defineComponent( {
         
         if (role === 'confirm') {
           const fd = new FormData();
-
+          
           fd.append('id',data.id)
           fd.append('nombre',data.nombre)
           fd.append('costo',data.costo)
           fd.append('receta_id',data.receta_id)
           fd.append('foto',data.foto)
 
-          ApiService.actualizar('producto',data.id,fd)
+         ApiService.actualizar('producto',data.id,data)
           console.log("data",data)
           console.log(fd)
         }

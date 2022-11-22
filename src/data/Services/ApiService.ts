@@ -12,7 +12,7 @@ export const ApiService = {
         console.error(error);
     }
     },
-    actualizar(key:string,id:string,item: any) {
+    actualizar(key:string,id:string,item:object) {
         axios.put(url+ key +'/'+ id ,item)
           .then(function (response) {
             console.log(response);

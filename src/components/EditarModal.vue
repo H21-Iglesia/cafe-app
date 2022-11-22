@@ -73,7 +73,7 @@
         guardarImagen(event){
           this.foto = event.target.files[0]
 
-          this.cargarImagen(this.foto)
+          this.cargarImagen(event.target.files[0])
 
         },
         cargarImagen(file){
