@@ -1,31 +1,33 @@
 <template>
   <ion-page>
     <ion-header mode="md">
-      <ion-toolbar color="primary">
+      <ion-toolbar color="primary">        
         <ion-buttons slot="start">
           <ion-button router-link="/home" router-direction="back">
             <ion-icon :icon="arrowBackOutline"></ion-icon>
           </ion-button>
         </ion-buttons>
-        <ion-title slot="end">PEDIDOS PENDIENTES</ion-title>
+        <ion-title slot="end">PEDIDOS</ion-title>     
       </ion-toolbar>
     </ion-header>
 
     <ion-content :fullscreen="true" color="warning">
 
 
+
       <ion-refresher slot="fixed" @ionRefresh="Cargar($event)">
         <ion-refresher-content></ion-refresher-content>
       </ion-refresher>
 
+
       <ion-card class="cards">
 
         <ion-accordion-group v-for="(Pedido, index) in pedidos" :key="index">
-          <ion-accordion v-if="Pedido.estado_id === 1">
+          <ion-accordion v-if="Pedido.estado_id === estado">
 
             <ion-item slot="header" value="first" color="light">
               <ion-card-header>
-                <ion-card-title color="dark">#0{{Pedido.id + " - "+ Pedido.nombre_cliente}}</ion-card-title>
+                <ion-card-title color="dark">#0{{Pedido.id + " - "+ (Pedido.nombre_cliente? Pedido.nombre_cliente:"Pedido") }}</ion-card-title>
               </ion-card-header>
             </ion-item>
 
@@ -62,7 +64,7 @@
 
               </ion-item-sliding>
               <br>
-              <ion-button color="warning" expand="block" @click="Pedido.estado_id = 2; GuardarPedido(Pedido);">
+              <ion-button color="warning" expand="block" v-if="estado == 1" @click="Pedido.estado_id = 2; GuardarPedido(Pedido);">
                 COMPLETADO</ion-button>
             </ion-card-content>
 
@@ -72,7 +74,18 @@
       </ion-card>
 
     </ion-content>
-
+    <ion-footer mode="md">
+      <ion-toolbar color="light">
+        <ion-segment value="default" color="primary">
+      <ion-segment-button value="default" @click="estado = 1">
+        <ion-label>Pendientes</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="segment" @click="estado = 2">
+        <ion-label>Completados</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+      </ion-toolbar>
+    </ion-footer>
   </ion-page>
 </template>
 
@@ -80,7 +93,7 @@
 import {
   IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonButtons, IonItem, IonLabel, IonCard, IonCardContent, IonCardHeader,
   IonCardTitle, IonItemOption, IonItemOptions, IonItemSliding, IonRefresher, IonRefresherContent, IonSelect, IonSelectOption, IonAccordion,
-  IonAccordionGroup, IonCheckbox
+  IonAccordionGroup, IonCheckbox, IonSegment, IonSegmentButton,IonFooter
 } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import { ApiService } from '@/data/Services/ApiService';
@@ -97,7 +110,8 @@ export default defineComponent({
       arrowBackOutline,
       pedidos: null,
       trabajadores: [{ nombre: 'Lucas' }, { nombre: 'Andres' }, { nombre: 'Carla' }],
-      pedidocopia: null
+      pedidocopia: null,
+      estado: 1
     }
   },
   methods: {
@@ -141,10 +155,12 @@ export default defineComponent({
   },
   components: {
     IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonButtons, IonItem, IonLabel, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonItemOption, IonItemOptions, IonItemSliding
-    , IonRefresher, IonRefresherContent, IonSelect, IonSelectOption, IonAccordion, IonAccordionGroup, IonCheckbox
+    , IonRefresher, IonRefresherContent, IonSelect, IonSelectOption, IonAccordion, IonAccordionGroup, IonCheckbox,IonSegment, IonSegmentButton,IonFooter
   }
 });
 </script>
 <style scoped>
-
+ion-segment {
+  margin: 5;
+}
 </style>
