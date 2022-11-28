@@ -44,9 +44,10 @@
 
                   <ion-label>{{detalle.producto.nombre }}</ion-label>
                   <ion-select :selectedText=detalle.preparo 
-                    @ionChange="GuaradarSelectTrabajador($event.detail.value,detalle)">
+                    @ionChange="GuaradarSelectTrabajador($event.detail.value,detalle)" interface="popover">
                     <ion-select-option v-for="(trabajador, i) in trabajadores" :key="i" :value="trabajador.nombre">
-                      {{trabajador.nombre}}</ion-select-option>
+                      {{trabajador.nombre}}
+                    </ion-select-option>
                   </ion-select>
                 </ion-item>
 
@@ -109,7 +110,7 @@ export default defineComponent({
     return {
       arrowBackOutline,
       pedidos: null,
-      trabajadores: [{ nombre: 'Lucas' }, { nombre: 'Andres' }, { nombre: 'Carla' }],
+      trabajadores: [{ nombre: 'Lucas' }, { nombre: 'Sarah Mendez' }, { nombre: 'Emily' }, { nombre: 'Mateo' }, { nombre: 'Nicol' }, { nombre: 'Gabriel' }, { nombre: 'Andrea' }, { nombre: 'Alejandra' }, { nombre: 'Sarah Antelo' }, { nombre: 'Alvaro' }, { nombre: 'Tammy' }],
       pedidocopia: null,
       estado: 1
     }

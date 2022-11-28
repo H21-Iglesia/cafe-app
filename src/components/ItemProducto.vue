@@ -13,7 +13,7 @@
                     <ion-h3>{{p.costo}} bs</ion-h3>
                 </ion-label>
                 <ion-button @click="()=>{if(p.cantidad>0){p.cantidad = p.cantidad - 1}}" color="warning" >-</ion-button>
-                    {{p.cantidad}}
+                <p>{{p.cantidad}}</p>
                 <ion-button @click="p.cantidad = p.cantidad + 1 " color="warning" >+</ion-button>
 
             </ion-item>       
@@ -66,7 +66,12 @@ export default defineComponent({
 }
 
 .item ion-button{
-    width: 25px;
+    width: 37px;
+    height: 37px;
+}
+.item p{
+    margin-left: 3px;
+    margin-right: 3px;
 }
 
 .imagen{
@@ -84,5 +89,5 @@ export default defineComponent({
 }
 ion-item {
     --border-radius: 20px;
-  }
+}
 </style>

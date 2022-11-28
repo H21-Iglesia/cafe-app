@@ -32,9 +32,10 @@
                 <ion-label>Recetas - proximamente</ion-label>
                 </ion-item>
             </ion-card>
-
         </ion-content>
-
+    <ion-footer mode="ios" collapse="fade">
+        <ion-label color="secondary" class="creditos"> © H21 iglesia 2022 - @soyalexss</ion-label>
+    </ion-footer>
     </ion-page>
     
 
@@ -43,13 +44,13 @@
 </template>
 <script lang="ts">
 import { cartOutline,timeOutline,colorWandOutline,bagAddOutline } from "ionicons/icons";
-import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle,IonItem, IonLabel,IonHeader,IonToolbar,IonContent,IonPage,IonNavLink} from '@ionic/vue';
+import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle,IonItem, IonLabel,IonHeader,IonToolbar,IonContent,IonPage,IonNavLink,IonFooter} from '@ionic/vue';
 import { defineComponent } from 'vue';
 
 export default defineComponent( {
     name: 'HomePage',
     components:{
-        IonButton,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle,IonItem, IonLabel,IonHeader,IonToolbar,IonContent,IonPage,IonNavLink
+        IonButton,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle,IonItem, IonLabel,IonHeader,IonToolbar,IonContent,IonPage,IonNavLink,IonFooter
     },
     data() {
         return {
@@ -67,5 +68,11 @@ export default defineComponent( {
     display: box;
     justify-content: center;
     text-align: center;
+}
+.creditos{
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;  
 }    
 </style>
