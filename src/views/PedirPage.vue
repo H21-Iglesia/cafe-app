@@ -13,11 +13,10 @@
 
     <ion-content :fullscreen="true">
 
-      <ion-list>
-        <div v-for="producto in productos" :key="producto.id">
-          <item-producto @cantidad="productos[producto.id].cantidad=$event" :p="producto"></item-producto>
+      <ion-list >
+        <div v-for="producto in productos" :key="producto.id" >
+          <item-producto class="list" @cantidad="productos[producto.id].cantidad=$event" :p="producto"></item-producto>
         </div>
-
       </ion-list>
 
     </ion-content>
@@ -25,7 +24,7 @@
     <ion-footer mode="md">
       <ion-toolbar color="light">
         <ion-item color="light">
-          <ion-label>Nombre: </ion-label>
+          <ion-label>Cliente: </ion-label>
           <ion-input @click="$event.target.value = nombre" @IonInput="nombre=$event.target.value.toString()">
           </ion-input>
         </ion-item>
@@ -202,5 +201,8 @@ export default defineComponent({
 <style scoped>
 .input {
   background-color: rgb(196, 196, 196);
+}
+.list{
+  max-width:100%
 }
 </style>

@@ -2,13 +2,15 @@
 <template >
         <div class="contenedor">
 
-            <ion-thumbnail slot="start"  >
+            <!-- <ion-thumbnail slot="start" class="imagen">
+                <img :src="'https://apicafe.h21iglesia.org/images/'+ p.foto" alt="foto de producto">
+            </ion-thumbnail> -->
+
+            <ion-item class="item"  :expandable=true fill="outline" lines="none" shape="round"   >
+                <ion-thumbnail slot="start" >
                 <img class="imagen" :src="'https://apicafe.h21iglesia.org/images/'+ p.foto" alt="foto de producto">
-            </ion-thumbnail>
-
-            <ion-item class="item"  fill="outline" lines="none" shape="round"   >
-
-                <ion-label>
+                </ion-thumbnail>
+                <ion-label class="ion-text-wrap">
                     <ion-h2>{{p.nombre}}</ion-h2><br>
                     <ion-h3>{{p.costo}} bs</ion-h3>
                 </ion-label>
@@ -54,17 +56,18 @@ export default defineComponent({
 
 .item{
     padding: 5px;
-    min-width: 80%;
-    margin-left: 3%;
+    min-width: 100%;
+    max-width:100%;
 }
-.item ion-h2{
+.item ion-h2{ 
     font-size: 18px;
-
 }
 .item ion-h3{
     color: #7F8EA5;
 }
+.item ion-label{
 
+}
 .item ion-button{
     width: 37px;
     height: 37px;
@@ -72,22 +75,21 @@ export default defineComponent({
 .item p{
     margin-left: 3px;
     margin-right: 3px;
+    
 }
-
 .imagen{
-    border-radius: 30%;
-    margin-top: 20%;
-    min-height: 55px;
-    min-width: 55px;
-
+    border-radius:30%
 }
+
 .contenedor{
     display: inline-flex;
-    min-width: 100%;
-    margin-left: 4%;
-    margin-right: 5%;
+    min-width: 96%;
+    max-width: 96%;
+    margin-left:2%;
+    margin-right:2%;
 }
 ion-item {
     --border-radius: 20px;
+    
 }
 </style>
