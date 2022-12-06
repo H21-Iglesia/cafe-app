@@ -14,7 +14,7 @@
     <ion-content :fullscreen="true">
 
       <ion-list >
-        <div v-for="producto in productos" :key="producto.id" >
+        <div v-for="producto in productosfiltrados" :key="producto.id" >
           <item-producto class="list" @cantidad="productos[producto.id].cantidad=$event" :p="producto"></item-producto>
         </div>
       </ion-list>
@@ -23,6 +23,11 @@
 
     <ion-footer mode="md">
       <ion-toolbar color="light">
+        <ion-item color="light">
+          <ion-label>Buscar: </ion-label>
+          <ion-input @change="BuscarProductosFiltro($event.target.value.toString())">
+          </ion-input>
+        </ion-item>
         <ion-item color="light">
           <ion-label>Cliente: </ion-label>
           <ion-input @click="$event.target.value = nombre" @IonInput="nombre=$event.target.value.toString()">
@@ -63,7 +68,8 @@ export default defineComponent({
       ordenes: { productos: {}, cliente: "", estado: true, },
       pedidos: [],
       NroOrden: 0,
-      pedidosRutas: "pedidos"
+      pedidosRutas: "pedidos",
+      productosfiltrados:"",
 
     }
   },
@@ -158,7 +164,18 @@ export default defineComponent({
     },
     async CargarProductos() {
       this.productos = await ApiService.obtener('producto')
-    }
+      this.productosfiltrados = this.productos
+    },
+    BuscarProductosFiltro(texto){
+      if(texto){
+        this.productosfiltrados = this.productos.filter(item =>{    
+          let itemtexto = (item.nombre).toUpperCase()
+          return itemtexto.indexOf(texto.toUpperCase()) > -1;
+        })
+      }else{
+        this.productosfiltrados = this.productos;
+      }
+    },
 
   },
   computed: {
