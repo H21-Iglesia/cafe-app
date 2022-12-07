@@ -8,6 +8,10 @@
           </ion-button>
         </ion-buttons>
         <ion-title slot="end">CREAR PEDIDO</ion-title>
+        <ion-item color="primary">
+          <ion-input placeholder="Buscar" @IonInput="BuscarProductosFiltro($event.target.value.toString())" @click="$event.target.value = '';BuscarProductosFiltro('') " >
+          </ion-input>
+        </ion-item>
       </ion-toolbar>
     </ion-header>
 
@@ -15,7 +19,7 @@
 
       <ion-list >
         <div v-for="producto in productosfiltrados" :key="producto.id" >
-          <item-producto class="list" @cantidad="productos[producto.id].cantidad=$event" :p="producto"></item-producto>
+          <item-producto  class="list" @cantidad="productos[producto.id].cantidad=$event" :p="producto"></item-producto>
         </div>
       </ion-list>
 
@@ -23,15 +27,14 @@
 
     <ion-footer mode="md">
       <ion-toolbar color="light">
-        <ion-item color="light">
-          <ion-label>Buscar: </ion-label>
-          <ion-input @change="BuscarProductosFiltro($event.target.value.toString())">
-          </ion-input>
-        </ion-item>
+
         <ion-item color="light">
           <ion-label>Cliente: </ion-label>
           <ion-input @click="$event.target.value = nombre" @IonInput="nombre=$event.target.value.toString()">
           </ion-input>
+        </ion-item>
+        <ion-item color="light">
+        <ion-label class="ion-text-wrap" > Pedido: {{mostrarPedido}}</ion-label>
         </ion-item>
         <br>
         <ion-title>TOTAL: {{total}} bs</ion-title>
@@ -196,6 +199,14 @@ export default defineComponent({
       this.cargarPedido(pedido)
 
       return suma
+    },
+    mostrarPedido(){
+      let pedidolista = ""
+      for (let index = 0; index < this.pedido.length; index++) {
+        pedidolista = pedidolista + this.pedido[index].nombre + ', ';
+        
+      }
+      return pedidolista
     }
   },
   components: {
