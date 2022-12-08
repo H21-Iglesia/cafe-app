@@ -76,12 +76,10 @@ export default defineComponent( {
           fd.append('receta_id',data.receta_id)
         
           ApiService.crear('producto',fd)
-          console.log(fd)
         }
         this.TraerProductos()             
         },
         async AbrirEditarModal(producto) {
-        console.log(producto)
         const modal = await modalController.create({
           component: EditarModal,
           componentProps:{producto}
@@ -100,8 +98,6 @@ export default defineComponent( {
           fd.append('foto',data.foto)
 
          ApiService.actualizar('producto',data.id,data)
-          console.log("data",data)
-          console.log(fd)
         }
         this.TraerProductos()
         },

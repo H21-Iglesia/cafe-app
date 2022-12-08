@@ -46,19 +46,30 @@
 import { cartOutline,timeOutline,colorWandOutline,bagAddOutline } from "ionicons/icons";
 import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle,IonItem, IonLabel,IonHeader,IonToolbar,IonContent,IonPage,IonNavLink,IonFooter} from '@ionic/vue';
 import { defineComponent } from 'vue';
+import {ably} from "../data/Services/SocketService"
 
 export default defineComponent( {
     name: 'HomePage',
     components:{
         IonButton,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle,IonItem, IonLabel,IonHeader,IonToolbar,IonContent,IonPage,IonNavLink,IonFooter
     },
+    mounted() {
+        this.ConectarSocket()
+    },
+    unmounted() {
+        ably.close(); 
+        console.log('Closed the connection to Ably.');
+    },
     data() {
         return {
             cartOutline,timeOutline,colorWandOutline,bagAddOutline
-        
         }
     },
     methods: {
+        async ConectarSocket(){            
+            await ably.connection.once('connected');
+            console.log('Connected to Ably!');
+        }
         
     },
 })

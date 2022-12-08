@@ -39,7 +39,6 @@
         <br>
         <ion-title>TOTAL: {{total}} bs</ion-title>
         <br>
-
         <ion-button expand="block" shape="round" color="warning" @click="Pedir2">PEDIR</ion-button>
       </ion-toolbar>
     </ion-footer>
@@ -47,12 +46,13 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonList, IonPage, IonTitle, IonToolbar, toastController, IonButton, IonButtons, IonFooter, IonItem, IonInput, IonLabel } from '@ionic/vue';
+import { IonContent, IonHeader, IonList, IonPage, IonTitle, IonToolbar, toastController, IonButton, IonButtons, IonFooter, IonItem, IonInput, IonLabel} from '@ionic/vue';
 import { defineComponent } from 'vue';
 import ItemProducto from '@/components/ItemProducto.vue'
 import { arrowBackOutline } from "ionicons/icons";
 import { ApiService } from '../data/Services/ApiService';
 import { Orden } from '../data/orden';
+import {ably} from "../data/Services/SocketService"
 
 export default defineComponent({
   name: 'PedirPage',
@@ -73,7 +73,7 @@ export default defineComponent({
       NroOrden: 0,
       pedidosRutas: "pedidos",
       productosfiltrados:"",
-
+  
     }
   },
   methods: {
@@ -88,10 +88,6 @@ export default defineComponent({
         pedidos.push(this.ordenes)
 
         localStorage.setItem("pedidos", JSON.stringify(pedidos))
-
-
-        console.log(JSON.parse(localStorage.getItem("pedidos")))
-        console.log(this.pedidos)
 
         this.cantidad = 0
         this.nombre = ""
@@ -124,7 +120,7 @@ export default defineComponent({
       this.GuardarPedidoApi()
       this.limpiarProductos()
       this.Notificar("Pedido completado")
-
+      this.publishSocket()
     },
     cargarPedido(pedido) {
 
@@ -179,6 +175,11 @@ export default defineComponent({
         this.productosfiltrados = this.productos;
       }
     },
+    async publishSocket(){
+      const channel = ably.channels.get('pedidos');
+      await channel.publish('comida', 'Nuevo pedido');
+    }
+
 
   },
   computed: {
@@ -222,7 +223,7 @@ export default defineComponent({
     IonFooter,
     IonItem,
     IonInput,
-    IonLabel
+    IonLabel,
   },
 });
 </script>

@@ -65,7 +65,7 @@
 
               </ion-item-sliding>
               <br>
-              <ion-button color="warning" expand="block" v-if="estado == 1" @click="Pedido.estado_id = 2; GuardarPedido(Pedido);">
+              <ion-button color="warning" expand="block" v-if="estado == 1" @click="Pedido.estado_id = 2; GuardarPedido(Pedido); publishSocket(Pedido.id);">
                 COMPLETADO</ion-button>
             </ion-card-content>
 
@@ -94,17 +94,20 @@
 import {
   IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonButtons, IonItem, IonLabel, IonCard, IonCardContent, IonCardHeader,
   IonCardTitle, IonItemOption, IonItemOptions, IonItemSliding, IonRefresher, IonRefresherContent, IonSelect, IonSelectOption, IonAccordion,
-  IonAccordionGroup, IonCheckbox, IonSegment, IonSegmentButton,IonFooter
+  IonAccordionGroup, IonCheckbox, IonSegment, IonSegmentButton,IonFooter,toastController 
 } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import { ApiService } from '@/data/Services/ApiService';
 import { arrowBackOutline } from "ionicons/icons";
+import {ably} from "../data/Services/SocketService"
 
 
 export default defineComponent({
   name: 'PendientePage',
   mounted() {
     this.obtenerPedidosApi()
+    this.suscribeSocketPedidos()
+    this.suscribeSocketCompletados()
   },
   data() {
     return {
@@ -117,36 +120,56 @@ export default defineComponent({
   },
   methods: {
     Cargar(event: CustomEvent) {
-      // this.pedidos =ApiService.obtener('pedido')
-      // this.pedidos =  JSON.parse(localStorage.getItem("pedidos"))
       this.obtenerPedidosApi()
-      console.log(this.pedidos)
-
-      console.log('Begin async operation');
       setTimeout(() => {
         // eslint-disable-next-line no-undef
         const target = event.target as HTMLIonRefresherElement;
-        console.log('Async operation has ended');
         target.complete();
       }, 500);
     },
     GuardarProducto(detalle) {
-      console.log(detalle)
       ApiService.actualizar('pedidoProducto', detalle.id, detalle)
     },
     GuardarPedido(pedido) {
-      console.log(pedido)
       ApiService.actualizar('pedido', pedido.id, pedido)
 
     },
     GuaradarSelectTrabajador(value, detalle) {
-      console.log(value);
       detalle.preparo = value
       ApiService.actualizar('pedidoProducto', detalle.id, detalle)
     },
     async obtenerPedidosApi() {
       this.pedidos = await ApiService.obtener('pedido')
-      console.log('pedidos', this.pedidos)
+    },
+    async suscribeSocketPedidos(){
+      const channel = ably.channels.get('pedidos');
+      await channel.subscribe('comida', (message) => {
+        console.log(message.data)       
+        this.obtenerPedidosApi()
+        this.Notificar('top','Nuevo pedido!')
+      });
+    },
+    async suscribeSocketCompletados(){
+      const channel = ably.channels.get('pedidos');
+      await channel.subscribe('completado', (message) => {
+        console.log(message.data)       
+        this.obtenerPedidosApi()
+        this.Notificar('bottom',message.data)
+      });
+    },
+    async publishSocket(numero){
+      const channel = ably.channels.get('pedidos');
+      await channel.publish('completado', 'se completo el pedido # ' + numero);
+    },
+    async Notificar(position: 'top' | 'middle' | 'bottom',mensaje){
+      const toast = await toastController.create({
+          message: mensaje,
+          duration: 2000,
+          color:'light',
+          position: position
+        });
+
+        await toast.present();
     }
 
 

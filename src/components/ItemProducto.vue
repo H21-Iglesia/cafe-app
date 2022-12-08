@@ -27,7 +27,7 @@
     
 </template>
 <script lang="ts">
-import {  IonButton,IonItem, IonLabel,IonThumbnail, } from '@ionic/vue';
+import {  IonButton,IonItem, IonLabel,IonThumbnail} from '@ionic/vue';
 import { defineComponent, } from 'vue'
 import { cafe } from "ionicons/icons";
 

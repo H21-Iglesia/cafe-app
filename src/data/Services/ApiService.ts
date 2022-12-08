@@ -6,7 +6,6 @@ export const ApiService = {
     async obtener(key: string) {
     try {
         const response = await axios.get(url + key);
-        console.log('response',response.data)
         return response.data 
     } catch (error) {
         console.error(error);
@@ -15,7 +14,7 @@ export const ApiService = {
     actualizar(key:string,id:string,item:object) {
         axios.put(url+ key +'/'+ id ,item)
           .then(function (response) {
-            console.log(response);
+            return response
           })
           .catch(function (error) {
             console.log(error);
@@ -24,7 +23,7 @@ export const ApiService = {
     crear(key:string ,item: object){
         axios.post(url+ key ,item)
           .then(function (response) {
-            console.log(response);
+            return response
           })
           .catch(function (error) {
             console.log(error);
