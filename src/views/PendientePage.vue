@@ -100,7 +100,7 @@ import { defineComponent } from 'vue';
 import { ApiService } from '@/data/Services/ApiService';
 import { arrowBackOutline } from "ionicons/icons";
 import {ably} from "../data/Services/SocketService"
-
+import {Howl} from 'howler';
 
 export default defineComponent({
   name: 'PendientePage',
@@ -108,6 +108,10 @@ export default defineComponent({
     this.obtenerPedidosApi()
     this.suscribeSocketPedidos()
     this.suscribeSocketCompletados()
+    this.sound = new Howl({
+                    src: ['https://apicafe.h21iglesia.org/sounds/pristine-609.mp3'],
+                    html5: true
+                });
   },
   data() {
     return {
@@ -115,7 +119,8 @@ export default defineComponent({
       pedidos: null,
       trabajadores: [{ nombre: 'Lucas' }, { nombre: 'Sarah Mendez' }, { nombre: 'Emily' }, { nombre: 'Mateo' }, { nombre: 'Nicol' }, { nombre: 'Gabriel' }, { nombre: 'Andrea' }, { nombre: 'Alejandra' }, { nombre: 'Sarah Antelo' }, { nombre: 'Alvaro' }, { nombre: 'Tammy' }],
       pedidocopia: null,
-      estado: 1
+      estado: 1, 
+      sound: null    
     }
   },
   methods: {
@@ -146,7 +151,8 @@ export default defineComponent({
       await channel.subscribe('comida', (message) => {
         console.log(message.data)       
         this.obtenerPedidosApi()
-        this.Notificar('top','Nuevo pedido!')
+        this.ReproducirSonido()
+        this.Notificar('top','Nuevo pedido!')  
       });
     },
     async suscribeSocketCompletados(){
@@ -170,6 +176,9 @@ export default defineComponent({
         });
 
         await toast.present();
+    },
+    ReproducirSonido(){
+      this.sound.play()
     }
 
 
