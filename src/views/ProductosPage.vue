@@ -97,7 +97,7 @@ export default defineComponent( {
           fd.append('receta_id',data.receta_id)
           fd.append('foto',data.foto)
 
-         ApiService.actualizar('producto',data.id,data)
+         ApiService.crear('producto/editar',fd)
         }
         this.TraerProductos()
         },
