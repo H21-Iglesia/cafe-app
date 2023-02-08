@@ -9,7 +9,7 @@
         </ion-buttons>
         <ion-title slot="end">CREAR PEDIDO</ion-title>
         <ion-item color="primary">
-          <ion-input placeholder="Buscar" @IonInput="BuscarProductosFiltro($event.target.value.toString())" @click="$event.target.value = '';BuscarProductosFiltro('') " >
+          <ion-input placeholder="Buscar" ref="inputRef" @IonInput="BuscarProductosFiltro($event.target.value.toString())" @click="$event.target.value = '';BuscarProductosFiltro('') " >
           </ion-input>
         </ion-item>
       </ion-toolbar>
@@ -45,7 +45,7 @@
   </ion-page>
 </template>
 
-<script lang="ts">
+<script lang="js">
 import { IonContent, IonHeader, IonList, IonPage, IonTitle, IonToolbar, toastController, IonButton, IonButtons, IonFooter, IonItem, IonInput, IonLabel} from '@ionic/vue';
 import { defineComponent } from 'vue';
 import ItemProducto from '@/components/ItemProducto.vue'
@@ -56,9 +56,10 @@ import {ably} from "../data/Services/SocketService"
 
 export default defineComponent({
   name: 'PedirPage',
-  mounted() {
+  ionViewDidEnter() {
     localStorage.setItem("pedidos", JSON.stringify(this.pedidos))
     this.CargarProductos()
+    this.FocusBuscar()
   },
   data() {
     return {
@@ -178,9 +179,12 @@ export default defineComponent({
     async publishSocket(){
       const channel = ably.channels.get('pedidos');
       await channel.publish('comida', 'Nuevo pedido');
+    },
+    FocusBuscar(){
+      // var input = this.$refs.BuscarRef.getInputElement().value
+      //this.$refs.BuscarRef.getInputElement().setFocus()
+      this.$refs.inputRef.setFocus();
     }
-
-
   },
   computed: {
     total() {

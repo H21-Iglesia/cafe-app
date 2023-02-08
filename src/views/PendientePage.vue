@@ -3,7 +3,7 @@
     <ion-header mode="md">
       <ion-toolbar color="primary">        
         <ion-buttons slot="start">
-          <ion-button router-link="/home" router-direction="back">
+          <ion-button router-link="/" router-direction="back">
             <ion-icon :icon="arrowBackOutline"></ion-icon>
           </ion-button>
         </ion-buttons>
@@ -13,17 +13,14 @@
 
     <ion-content :fullscreen="true" color="warning">
 
-
-
       <ion-refresher slot="fixed" @ionRefresh="Cargar($event)">
         <ion-refresher-content></ion-refresher-content>
       </ion-refresher>
 
-
       <ion-card class="cards">
 
         <ion-accordion-group v-for="(Pedido, index) in pedidos" :key="index">
-          <ion-accordion v-if="Pedido.estado_id === estado">
+          <ion-accordion v-if="estado == 1 ? Pedido.estado_id === estado && ((hoy.toLocaleDateString()) == convertirFecha(Pedido.created_at).toLocaleDateString()): true">
 
             <ion-item slot="header" value="first" color="light">
               <ion-card-header>
@@ -82,7 +79,7 @@
         <ion-label>Pendientes</ion-label>
       </ion-segment-button>
       <ion-segment-button value="segment" @click="estado = 2">
-        <ion-label>Completados</ion-label>
+        <ion-label>Todos</ion-label>
       </ion-segment-button>
     </ion-segment>
       </ion-toolbar>
@@ -104,6 +101,7 @@ import {Howl} from 'howler';
 
 export default defineComponent({
   name: 'PendientePage',
+  
   mounted() {
     this.obtenerPedidosApi()
     this.suscribeSocketPedidos()
@@ -112,6 +110,7 @@ export default defineComponent({
                     src: ['https://apicafe.h21iglesia.org/sounds/pristine-609.mp3'],
                     html5: true
                 });
+    this.obtenerFecha()
   },
   data() {
     return {
@@ -120,7 +119,8 @@ export default defineComponent({
       trabajadores: [{ nombre: 'Lucas' }, { nombre: 'Sarah Mendez' }, { nombre: 'Emily' }, { nombre: 'Mateo' }, { nombre: 'Nicol' }, { nombre: 'Gabriel' }, { nombre: 'Andrea' }, { nombre: 'Alejandra' }, { nombre: 'Sarah Antelo' }, { nombre: 'Alvaro' }, { nombre: 'Tammy' }],
       pedidocopia: null,
       estado: 1, 
-      sound: null    
+      sound: null,
+      hoy:null    
     }
   },
   methods: {
@@ -179,6 +179,16 @@ export default defineComponent({
     },
     ReproducirSonido(){
       this.sound.play()
+    },
+    obtenerFecha(){
+      const tiempoTranscurrido = Date.now();
+      const hoy = new Date(tiempoTranscurrido);
+      this.hoy = hoy
+    },
+    convertirFecha(fecha){
+      const fechanueva = new Date(fecha)
+      console.log(fechanueva)
+      return fechanueva
     }
 
 
