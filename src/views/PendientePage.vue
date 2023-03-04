@@ -11,7 +11,7 @@
       </ion-toolbar>
     </ion-header>
 
-    <ion-content :fullscreen="true" color="warning">
+    <ion-content :fullscreen="true" color="secondary">
 
       <ion-refresher slot="fixed" @ionRefresh="Cargar($event)">
         <ion-refresher-content></ion-refresher-content>
@@ -20,11 +20,11 @@
       <ion-card class="cards">
 
         <ion-accordion-group v-for="(Pedido, index) in pedidos" :key="index">
-          <ion-accordion v-if="estado == 1 ? Pedido.estado_id === estado && ((hoy.toLocaleDateString()) == convertirFecha(Pedido.created_at).toLocaleDateString()): true">
+          <ion-accordion v-if="estado != 2 ? Pedido.estado_id != 2 && ((hoy.toLocaleDateString()) == convertirFecha(Pedido.created_at).toLocaleDateString()): true">
 
             <ion-item slot="header" value="first" color="light">
               <ion-card-header>
-                <ion-card-title color="dark">#0{{Pedido.id + " - "+ (Pedido.nombre_cliente? Pedido.nombre_cliente:"Pedido") }}</ion-card-title>
+                <ion-card-title color="dark">#{{Pedido.id + " - "+ (Pedido.nombre_cliente? Pedido.nombre_cliente:"Pedido") }}</ion-card-title>
               </ion-card-header>
             </ion-item>
 
@@ -74,14 +74,14 @@
     </ion-content>
     <ion-footer mode="md">
       <ion-toolbar color="light">
-        <ion-segment value="default" color="primary">
-      <ion-segment-button value="default" @click="estado = 1">
-        <ion-label>Pendientes</ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="segment" @click="estado = 2">
-        <ion-label>Todos</ion-label>
-      </ion-segment-button>
-    </ion-segment>
+        <ion-segment value="default" color="warning">
+          <ion-segment-button value="default" @click="estado = 1">
+            <ion-label>Pendientes</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="segment" @click="estado = 2">
+            <ion-label>Todos</ion-label>
+          </ion-segment-button>
+        </ion-segment>
       </ion-toolbar>
     </ion-footer>
   </ion-page>

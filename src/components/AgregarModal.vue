@@ -6,7 +6,7 @@
         </ion-buttons>
         <ion-title>Agregar producto</ion-title>
         <ion-buttons slot="end">
-          <ion-button @click="confirm">Confirmar</ion-button>
+          <ion-button color="medium" @click="confirm">Confirmar</ion-button>
         </ion-buttons>
       </ion-toolbar>
     </ion-header>

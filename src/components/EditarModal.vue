@@ -6,7 +6,7 @@
         </ion-buttons>
         <ion-title>Editar producto</ion-title>
         <ion-buttons slot="end">
-          <ion-button @click="confirm">Confirmar</ion-button>
+          <ion-button color="medium" @click="confirm">Confirmar</ion-button>
         </ion-buttons>
       </ion-toolbar>
     </ion-header>
@@ -23,15 +23,15 @@
         <ion-label position="stacked">Receta</ion-label>
         <ion-input v-model="receta_id" placeholder="selecionar receta"></ion-input>
       </ion-item>
-      <ion-item>
-        <ion-thumbnail slot="start" v-if="!imagenSeleccionada" >
+      <ion-item >
+        <ion-avatar slot="start" v-if="!imagenSeleccionada" >
           <ion-img class="imagen" :src="'https://apicafe.h21iglesia.org/images/'+foto"/>
-        </ion-thumbnail>
-        <ion-thumbnail slot="start" v-if="imagenSeleccionada" >
+        </ion-avatar>
+        <ion-avatar slot="start" v-if="imagenSeleccionada" >
           <ion-img class="imagen" :src="imagen"/>
-        </ion-thumbnail>
+        </ion-avatar>
         <ion-label position="stacked">Foto</ion-label>
-        <input type="file" @change="guardarImagen" ref="fileinput" style=""  />
+        <input class="inputimagen" type="file" @change="guardarImagen" ref="fileinput" style=""  />
       </ion-item>
     </ion-content>
   </template>
@@ -48,14 +48,14 @@
       IonLabel,
       IonInput,
       modalController,
-      IonThumbnail,
-      IonImg
+      IonImg,
+      IonAvatar
     } from '@ionic/vue';
     import { defineComponent } from 'vue';
   
     export default defineComponent({
       name: 'EditarModal',
-      components: { IonContent, IonHeader, IonTitle, IonToolbar, IonButtons, IonButton, IonItem, IonLabel, IonInput,IonImg,IonThumbnail },
+      components: { IonContent, IonHeader, IonTitle, IonToolbar, IonButtons, IonButton, IonItem, IonLabel, IonInput,IonImg,IonAvatar },
       props:{
         producto:Object,
     },
@@ -102,5 +102,8 @@
     <style scoped>
     .imagen{
       border-radius: 30%;
+    }
+    .inputimagen{
+      margin: 10px;
     }
     </style>

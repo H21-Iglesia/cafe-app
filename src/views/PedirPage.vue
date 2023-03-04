@@ -9,7 +9,7 @@
         </ion-buttons>
         <ion-title slot="end">CREAR PEDIDO</ion-title>
         <ion-item color="primary">
-          <ion-input placeholder="Buscar" ref="inputRef" @IonInput="BuscarProductosFiltro($event.target.value.toString())" @click="$event.target.value = '';BuscarProductosFiltro('') " >
+          <ion-input placeholder="Buscar" ref="inputRef" :autofocus="true" @IonInput="BuscarProductosFiltro($event.target.value.toString())" @click="$event.target.value = '';BuscarProductosFiltro('') " >
           </ion-input>
         </ion-item>
       </ion-toolbar>
@@ -39,13 +39,17 @@
         <br>
         <ion-title>TOTAL: {{total}} bs</ion-title>
         <br>
-        <ion-button expand="block" shape="round" color="warning" @click="Pedir2">PEDIR</ion-button>
+        <ion-buttons class="botones">
+          <ion-button fill="solid" class="pedir" shape="round" color="warning" @click="Pedir2(1)">PEDIR</ion-button>
+          <ion-button  fill="solid" class="deuda" shape="round" color="tertiary" @click="Pedir2(3)">DEUDA</ion-button>
+        </ion-buttons>
+
       </ion-toolbar>
     </ion-footer>
   </ion-page>
 </template>
 
-<script lang="js">
+<script lang="ts">
 import { IonContent, IonHeader, IonList, IonPage, IonTitle, IonToolbar, toastController, IonButton, IonButtons, IonFooter, IonItem, IonInput, IonLabel} from '@ionic/vue';
 import { defineComponent } from 'vue';
 import ItemProducto from '@/components/ItemProducto.vue'
@@ -73,7 +77,7 @@ export default defineComponent({
       pedidos: [],
       NroOrden: 0,
       pedidosRutas: "pedidos",
-      productosfiltrados:"",
+      productosfiltrados:null,
   
     }
   },
@@ -113,12 +117,12 @@ export default defineComponent({
         return toast.present();
       }
     },
-    async Pedir2() {
+    async Pedir2(estado:number) {
       if (this.total <= 0) {
         return this.Notificar("No hay productos selecionados")
       }
 
-      this.GuardarPedidoApi()
+      this.GuardarPedidoApi(estado)
       this.limpiarProductos()
       this.Notificar("Pedido completado")
       this.publishSocket()
@@ -128,7 +132,7 @@ export default defineComponent({
       this.pedido = pedido
 
     },
-    GuardarPedidoApi() {
+    GuardarPedidoApi(estado:number) {
 
       let orden = new Orden();
 
@@ -137,6 +141,7 @@ export default defineComponent({
       })
 
       orden.nombre_cliente = this.nombre
+      orden.estado_id =  estado
 
       this.NroOrden++
 
@@ -183,7 +188,7 @@ export default defineComponent({
     FocusBuscar(){
       // var input = this.$refs.BuscarRef.getInputElement().value
       //this.$refs.BuscarRef.getInputElement().setFocus()
-      this.$refs.inputRef.setFocus();
+      //
     }
   },
   computed: {
@@ -238,4 +243,16 @@ export default defineComponent({
 .list{
   max-width:100%
 }
+.pedir{
+  min-width: 70%;
+  height: 40px;
+}
+.deuda{
+  width: 100%;
+  height: 40px;
+}
+.botones{
+  height: 50px;
+}
+
 </style>

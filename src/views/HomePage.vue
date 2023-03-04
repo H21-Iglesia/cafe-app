@@ -8,33 +8,33 @@
 
         <ion-content>
             <ion-card class="iconos" router-link="/pedir"  >
-                <ion-icon  :icon="cartOutline" style="font-size: 80px" color="primary" ></ion-icon>
+                <ion-icon  :icon="cartOutline" style="font-size: 80px" color="warning" ></ion-icon>
                 <ion-item  style="text-align: center"  color="light">
                 <ion-label>Crear pedido</ion-label>
                 </ion-item>
             </ion-card >
             <ion-card class="iconos" router-link="/pendientes"  >
-                <ion-icon :icon="timeOutline" style="font-size: 80px" color="primary" ></ion-icon>
+                <ion-icon :icon="timeOutline" style="font-size: 80px" color="warning" ></ion-icon>
                 <ion-item style="text-align: center" color="light">
                 <ion-label>Pedidos pendientes</ion-label>
                 </ion-item>
             </ion-card>
             <ion-card class="iconos" router-link="/productos"  >
-                <ion-icon :icon="bagAddOutline" style="font-size: 80px" color="primary" ></ion-icon>
+                <ion-icon :icon="bagAddOutline" style="font-size: 80px" color="warning" ></ion-icon>
                 <ion-item style="text-align: center" color="light">
                 <ion-label>Productos</ion-label>
                 </ion-item>
             </ion-card>
 
             <ion-card class="iconos" :disabled=true>
-                <ion-icon :icon="colorWandOutline" style="font-size: 80px" color="primary"></ion-icon>
+                <ion-icon :icon="colorWandOutline" style="font-size: 80px" color="warning"></ion-icon>
                 <ion-item style="text-align: center" color="light">
                 <ion-label>Recetas - proximamente</ion-label>
                 </ion-item>
             </ion-card>
         </ion-content>
     <ion-footer mode="ios" collapse="fade">
-        <ion-label color="secondary" class="creditos"> © H21 iglesia 2022 - @soyalexss</ion-label>
+        <ion-label color="secondary" class="creditos"> © H21 - 2023</ion-label>
     </ion-footer>
     </ion-page>
     
