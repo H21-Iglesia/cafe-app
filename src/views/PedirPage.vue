@@ -9,7 +9,7 @@
         </ion-buttons>
         <ion-title slot="end">CREAR PEDIDO</ion-title>
         <ion-item color="primary">
-          <ion-input placeholder="Buscar" ref="inputRef" :autofocus="true" @IonInput="BuscarProductosFiltro($event.target.value.toString())" @click="$event.target.value = '';BuscarProductosFiltro('') " >
+          <ion-input placeholder="Buscar" ref="myInput" autofocus @IonInput="BuscarProductosFiltro($event.target.value.toString())" @click="$event.target.value = '';BuscarProductosFiltro('') " >
           </ion-input>
         </ion-item>
       </ion-toolbar>
@@ -78,6 +78,8 @@ export default defineComponent({
       NroOrden: 0,
       pedidosRutas: "pedidos",
       productosfiltrados:null,
+      inputValue: '',
+
   
     }
   },
@@ -126,6 +128,7 @@ export default defineComponent({
       this.limpiarProductos()
       this.Notificar("Pedido completado")
       this.publishSocket()
+      this.FocusBuscar()
     },
     cargarPedido(pedido) {
 
@@ -163,7 +166,9 @@ export default defineComponent({
       const toast = await toastController
         .create({
           message: mensaje,
-          duration: duracion
+          duration: duracion,
+          position: "bottom",
+          color: 'warning'
         })
       return toast.present();
     },
@@ -186,10 +191,13 @@ export default defineComponent({
       await channel.publish('comida', 'Nuevo pedido');
     },
     FocusBuscar(){
-      // var input = this.$refs.BuscarRef.getInputElement().value
-      //this.$refs.BuscarRef.getInputElement().setFocus()
-      //
-    }
+      this.$nextTick(() => {
+        const input = (this.$refs.myInput as InstanceType<typeof IonInput>).$el.querySelector('input') as HTMLInputElement;
+        if (input) {
+          input.focus();
+        }
+      });
+    },
   },
   computed: {
     total() {
@@ -233,6 +241,7 @@ export default defineComponent({
     IonItem,
     IonInput,
     IonLabel,
+    
   },
 });
 </script>
