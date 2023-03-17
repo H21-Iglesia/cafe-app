@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const url = 'https://apicafe.h21iglesia.org/api/';
+const url = 'https://apicafeteria.h21iglesia.org/api/';
 
 export const ApiService = {
     async obtener(key: string) {
@@ -28,6 +28,15 @@ export const ApiService = {
           .catch(function (error) {
             console.log(error);
           });
+    },
+    eliminar(key:string ,id: string){
+      axios.delete(url+ key +'/'+ id)
+      .then(function (response) {
+        return response
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
     }
   };
   export default { ApiService };

@@ -74,6 +74,10 @@ export default defineComponent( {
           fd.append('nombre',data.nombre)
           fd.append('costo',data.costo)
           fd.append('receta_id',data.receta_id)
+          fd.append('categorias', JSON.stringify(data.categorias))
+
+          console.log(data.categorias)
+          console.log(fd)
         
           ApiService.crear('producto',fd)
         }
@@ -96,6 +100,7 @@ export default defineComponent( {
           fd.append('costo',data.costo)
           fd.append('receta_id',data.receta_id)
           fd.append('foto',data.foto)
+          fd.append('categorias', JSON.stringify(data.categorias))
 
          ApiService.crear('producto/editar',fd)
         }
