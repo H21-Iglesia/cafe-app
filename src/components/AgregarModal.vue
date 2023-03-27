@@ -1,10 +1,10 @@
 <template>
     <ion-header>
-      <ion-toolbar>
+      <ion-toolbar mode="ios">
         <ion-buttons slot="start">
           <ion-button color="medium" @click="cancel">Cancelar</ion-button>
         </ion-buttons>
-        <ion-title>Agregar producto</ion-title>
+        <ion-title>Agregar</ion-title>
         <ion-buttons slot="end">
           <ion-button color="medium" @click="confirm">Confirmar</ion-button>
         </ion-buttons>

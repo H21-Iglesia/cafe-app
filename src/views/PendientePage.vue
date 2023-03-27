@@ -39,13 +39,13 @@
                   <ion-checkbox color="warning" slot="start" :checked="detalle.completado"
                     @click="(detalle.completado = true); GuardarProducto(detalle);"></ion-checkbox>
 
-                  <ion-label>{{detalle.producto.nombre }}</ion-label>
-                  <ion-select :selectedText=detalle.preparo 
+                  <ion-label class="ion-text-wrap">{{detalle.producto.nombre }}</ion-label>
+                  <!-- <ion-select :selectedText=detalle.preparo 
                     @ionChange="GuaradarSelectTrabajador($event.detail.value,detalle)" interface="popover">
                     <ion-select-option v-for="(trabajador, i) in trabajadores" :key="i" :value="trabajador.nombre">
                       {{trabajador.nombre}}
                     </ion-select-option>
-                  </ion-select>
+                  </ion-select> -->
                 </ion-item>
 
               </ion-item-sliding>
@@ -55,9 +55,9 @@
                   <ion-checkbox color="warning" slot="start" :checked="detalle.completado" :disabled="true">
                   </ion-checkbox>
 
-                  <ion-label>{{detalle.producto.nombre }}</ion-label>
-                  <ion-select :selectedText=detalle.preparo :disabled="true">
-                  </ion-select>
+                  <ion-label class="ion-text-wrap">{{detalle.producto.nombre }}</ion-label>
+                  <!-- <ion-select :selectedText=detalle.preparo :disabled="true">
+                  </ion-select> -->
                 </ion-item>
 
               </ion-item-sliding>
@@ -90,8 +90,9 @@
 <script lang="ts">
 import {
   IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonButtons, IonItem, IonLabel, IonCard, IonCardContent, IonCardHeader,
-  IonCardTitle, IonItemOption, IonItemOptions, IonItemSliding, IonRefresher, IonRefresherContent, IonSelect, IonSelectOption, IonAccordion,
+  IonCardTitle, IonItemOption, IonItemOptions, IonItemSliding, IonRefresher, IonRefresherContent, IonAccordion,
   IonAccordionGroup, IonCheckbox, IonSegment, IonSegmentButton,IonFooter,toastController 
+  //IonSelect, IonSelectOption,
 } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import { ApiService } from '@/data/Services/ApiService';
@@ -198,7 +199,8 @@ export default defineComponent({
   },
   components: {
     IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonButtons, IonItem, IonLabel, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonItemOption, IonItemOptions, IonItemSliding
-    , IonRefresher, IonRefresherContent, IonSelect, IonSelectOption, IonAccordion, IonAccordionGroup, IonCheckbox,IonSegment, IonSegmentButton,IonFooter
+    , IonRefresher, IonRefresherContent, IonAccordion, IonAccordionGroup, IonCheckbox,IonSegment, IonSegmentButton,IonFooter
+    //IonSelect, IonSelectOption
   }
 });
 </script>

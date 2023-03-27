@@ -17,7 +17,7 @@
                 <ion-thumbnail slot="start"   >
                     <img class="imagen" :src="'https://apicafe.h21iglesia.org/images/'+ producto.foto" alt="">
                 </ion-thumbnail>
-                <ion-label>{{producto.nombre}}</ion-label>
+                <ion-label class="ion-text-wrap">{{producto.nombre}}</ion-label>
                 <ion-button @click="AbrirEditarModal(producto)" color="tertiary">Editar</ion-button>
             </ion-item>
         </div>

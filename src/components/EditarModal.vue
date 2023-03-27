@@ -1,10 +1,12 @@
 <template>
     <ion-header>
-      <ion-toolbar>
+      <ion-toolbar mode="ios" >
         <ion-buttons slot="start">
           <ion-button color="medium" @click="cancel">Cancelar</ion-button>
         </ion-buttons>
-        <ion-title>Editar producto</ion-title>
+        <ion-title>
+          Editar
+        </ion-title>
         <ion-buttons slot="end">
           <ion-button color="medium" @click="confirm">Confirmar</ion-button>
         </ion-buttons>
@@ -13,15 +15,15 @@
     <ion-content class="ion-padding">
       <ion-item-group mode="md">
         <ion-item-divider >
-          <ion-label position="stacked" color="warning">Nombre:</ion-label>
+          <ion-label  color="warning">Nombre:</ion-label>
         </ion-item-divider>
         <ion-input v-model="nombre" placeholder="Nombre del producto"></ion-input>
         <ion-item-divider>
-          <ion-label position="stacked" color="warning">Precio:</ion-label>
+          <ion-label  color="warning">Precio:</ion-label>
         </ion-item-divider>
         <ion-input v-model="costo" placeholder="Costo del producto" type="number"></ion-input>
         <ion-item-divider >
-          <ion-label position="stacked" color="warning">Categorias:</ion-label>
+          <ion-label color="warning">Categorias:</ion-label>
         </ion-item-divider>
           <ion-chip v-for="(categoria, index) in categorias" :key="index" color="success">
             <ion-label>{{ categoria.detalle_categoria.nombre }}</ion-label>
@@ -32,18 +34,18 @@
             <ion-icon :icon="removeCircleOutline" @click="quitarNuevaCategoria(categoria.id)"></ion-icon>
           </ion-chip>
         <ion-item-divider >
-          <ion-label position="stacked" color="warning">Agregar categorias:</ion-label>
+          <ion-label color="warning">Agregar categorias:</ion-label>
         </ion-item-divider>
           <ion-chip v-for="(categoria, index) in liCategorias" :key="index" color="tertiary" class="ion-text-wrap">
             <ion-label >{{categoria.nombre }}</ion-label>
             <ion-icon :icon="addCircleOutline" @click="agregarCategoria(categoria.id,categoria.nombre)"></ion-icon>
           </ion-chip>
         <ion-item-divider >
-          <ion-label position="stacked" color="warning">Receta:</ion-label>
+          <ion-label  color="warning">Receta:</ion-label>
         </ion-item-divider>
         <ion-input disabled placeholder="No disponible" type="text"></ion-input>
         <ion-item-divider >
-          <ion-label position="stacked" color="warning">Foto:</ion-label>
+          <ion-label  color="warning">Foto:</ion-label>
         </ion-item-divider>
           <ion-avatar slot="start" v-if="!imagenSeleccionada" >
             <ion-img class="imagen" :src="'https://apicafeteria.h21iglesia.org/images/'+foto"/>
@@ -52,7 +54,7 @@
             <ion-img class="imagen" :src="imagen"/>
           </ion-avatar>
         <ion-item-divider >
-          <ion-label position="stacked" color="warning">Actualizar foto:</ion-label>
+          <ion-label color="warning">Actualizar foto:</ion-label>
         </ion-item-divider>          
           <input class="inputimagen" type="file" @change="guardarImagen" ref="fileinput" style=""  />
       </ion-item-group>
