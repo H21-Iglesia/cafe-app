@@ -34,14 +34,14 @@
           </ion-input>
         </ion-item>
         <ion-item color="light">
-        <ion-label class="ion-text-wrap" > Pedido: {{mostrarPedido}}</ion-label>
+        <ion-label class="ion-text-wrap" ion-fixed > Pedido: {{mostrarPedido}}</ion-label>
         </ion-item>
         <br>
         <ion-title>TOTAL: {{total}} bs</ion-title>
         <br>
         <ion-buttons class="botones">
-          <ion-button fill="solid" class="pedir" shape="round" color="warning" @click="Pedir2(1)">PEDIR</ion-button>
-          <ion-button  fill="solid" class="deuda" shape="round" color="tertiary" @click="Pedir2(3)">DEUDA</ion-button>
+          <ion-button fill="solid" class="pedir" shape="round" color="warning" @click="Pedir2(true)">PEDIR</ion-button>
+          <ion-button  fill="solid" class="deuda" shape="round" color="tertiary" @click="Pedir2(false)">DEUDA</ion-button>
         </ion-buttons>
 
       </ion-toolbar>
@@ -119,12 +119,12 @@ export default defineComponent({
         return toast.present();
       }
     },
-    async Pedir2(estado:number) {
+    async Pedir2(pagado:boolean) {
       if (this.total <= 0) {
         return this.Notificar("No hay productos selecionados")
       }
 
-      this.GuardarPedidoApi(estado)
+      this.GuardarPedidoApi(pagado)
       this.limpiarProductos()
       this.Notificar("Pedido completado")
       this.publishSocket()
@@ -135,7 +135,7 @@ export default defineComponent({
       this.pedido = pedido
 
     },
-    GuardarPedidoApi(estado:number) {
+    GuardarPedidoApi(pagado:boolean) {
 
       let orden = new Orden();
 
@@ -144,7 +144,7 @@ export default defineComponent({
       })
 
       orden.nombre_cliente = this.nombre
-      orden.estado_id =  estado
+      orden.pagado =  pagado
 
       this.NroOrden++
 

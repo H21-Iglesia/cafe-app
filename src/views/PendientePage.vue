@@ -24,7 +24,7 @@
 
             <ion-item slot="header" value="first" color="light">
               <ion-card-header>
-                <ion-card-title color="dark">#{{Pedido.id + " - "+ (Pedido.nombre_cliente? Pedido.nombre_cliente:"Pedido") }}</ion-card-title>
+                <ion-card-title color="dark">#{{Pedido.id + " - "+ (Pedido.nombre_cliente? Pedido.nombre_cliente:"Pedido") }} <ion-badge color="danger" v-show="!Pedido.pagado" >DEUDA</ion-badge> </ion-card-title>           
               </ion-card-header>
             </ion-item>
 
@@ -62,8 +62,10 @@
 
               </ion-item-sliding>
               <br>
+              <ion-button color="danger" expand="block" v-if="Pedido.pagado == 0" @click="Pedido.pagado = 1; GuardarPedido(Pedido);">
+                PAGAR DEUDA</ion-button>
               <ion-button color="warning" expand="block" v-if="estado == 1" @click="Pedido.estado_id = 2; GuardarPedido(Pedido); publishSocket(Pedido.id);">
-                COMPLETADO</ion-button>
+                PEDIDO COMPLETADO</ion-button>
             </ion-card-content>
 
           </ion-accordion>
@@ -91,7 +93,7 @@
 import {
   IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonButtons, IonItem, IonLabel, IonCard, IonCardContent, IonCardHeader,
   IonCardTitle, IonItemOption, IonItemOptions, IonItemSliding, IonRefresher, IonRefresherContent, IonAccordion,
-  IonAccordionGroup, IonCheckbox, IonSegment, IonSegmentButton,IonFooter,toastController 
+  IonAccordionGroup, IonCheckbox, IonSegment, IonSegmentButton,IonFooter,toastController,IonBadge
   //IonSelect, IonSelectOption,
 } from '@ionic/vue';
 import { defineComponent } from 'vue';
@@ -199,7 +201,7 @@ export default defineComponent({
   },
   components: {
     IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonButtons, IonItem, IonLabel, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonItemOption, IonItemOptions, IonItemSliding
-    , IonRefresher, IonRefresherContent, IonAccordion, IonAccordionGroup, IonCheckbox,IonSegment, IonSegmentButton,IonFooter
+    , IonRefresher, IonRefresherContent, IonAccordion, IonAccordionGroup, IonCheckbox,IonSegment, IonSegmentButton,IonFooter,IonBadge
     //IonSelect, IonSelectOption
   }
 });

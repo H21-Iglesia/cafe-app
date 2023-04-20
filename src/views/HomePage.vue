@@ -69,7 +69,7 @@ export default defineComponent( {
         async ConectarSocket(){            
             await ably.connection.once('connected');
             console.log('Connected to Ably!');
-        }
+        },
         
     },
 })

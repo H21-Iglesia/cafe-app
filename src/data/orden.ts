@@ -22,7 +22,7 @@ export class Orden implements IOrden {
         this.productos = []
         this.nombre_cliente = ""
         this.monto_pagado= 0;
-        this.pagado= false
+        this.pagado= true
         this.tipopago_id = 1
         this.estado_id = 1
         this.estado = false
