@@ -197,7 +197,7 @@ export default defineComponent({
           input.focus();
         }
       });
-    },
+    }
   },
   computed: {
     total() {
@@ -219,12 +219,17 @@ export default defineComponent({
       return suma
     },
     mostrarPedido(){
-      let pedidolista = ""
-      for (let index = 0; index < this.pedido.length; index++) {
-        pedidolista = pedidolista + this.pedido[index].nombre + ', ';
-        
+      let pedidolista = []
+      let pedidolistaConCantidad = []
+
+      for (let i = 0; i < this.pedido.length; i++) {
+        if(!pedidolista.includes(this.pedido[i].nombre)){
+          pedidolista.push(this.pedido[i].nombre)
+          pedidolistaConCantidad.push(( ' '+ this.pedido[i].cantidad + ' '+  this.pedido[i].nombre))
+        }
       }
-      return pedidolista
+
+      return pedidolistaConCantidad.toString()
     }
   },
   components: {
