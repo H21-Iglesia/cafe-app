@@ -79,7 +79,6 @@ export default defineComponent({
       pedidosRutas: "pedidos",
       productosfiltrados:null,
       inputValue: '',
-
   
     }
   },
@@ -123,7 +122,6 @@ export default defineComponent({
       if (this.total <= 0) {
         return this.Notificar("No hay productos selecionados")
       }
-
       this.GuardarPedidoApi(pagado)
       this.limpiarProductos()
       this.Notificar("Pedido completado")
@@ -148,9 +146,7 @@ export default defineComponent({
 
       this.NroOrden++
 
-
       ApiService.crear('pedido', orden)
-
     },
     limpiarProductos() {
 

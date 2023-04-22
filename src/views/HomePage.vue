@@ -58,7 +58,6 @@ export default defineComponent( {
     },
     unmounted() {
         ably.close(); 
-        console.log('Closed the connection to Ably.');
     },
     data() {
         return {
@@ -68,7 +67,6 @@ export default defineComponent( {
     methods: {
         async ConectarSocket(){            
             await ably.connection.once('connected');
-            console.log('Connected to Ably!');
         },
         
     },

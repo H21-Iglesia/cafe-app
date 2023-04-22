@@ -75,9 +75,6 @@ export default defineComponent( {
           fd.append('costo',data.costo)
           fd.append('receta_id',data.receta_id)
           fd.append('categorias', JSON.stringify(data.categorias))
-
-          console.log(data.categorias)
-          console.log(fd)
         
           ApiService.crear('producto',fd)
         }

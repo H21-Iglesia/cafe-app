@@ -151,8 +151,7 @@ export default defineComponent({
     },
     async suscribeSocketPedidos(){
       const channel = ably.channels.get('pedidos');
-      await channel.subscribe('comida', (message) => {
-        console.log(message.data)       
+      await channel.subscribe('comida', () => {
         this.obtenerPedidosApi()
         this.ReproducirSonido()
         this.Notificar('top','Nuevo pedido!')  
@@ -160,8 +159,7 @@ export default defineComponent({
     },
     async suscribeSocketCompletados(){
       const channel = ably.channels.get('pedidos');
-      await channel.subscribe('completado', (message) => {
-        console.log(message.data)       
+      await channel.subscribe('completado', (message) => {   
         this.obtenerPedidosApi()
         this.Notificar('bottom',message.data)
       });
@@ -190,7 +188,6 @@ export default defineComponent({
     },
     convertirFecha(fecha){
       const fechanueva = new Date(fecha)
-      console.log(fechanueva)
       return fechanueva
     }
 
