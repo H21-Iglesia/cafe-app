@@ -13,6 +13,9 @@
           </ion-input>
         </ion-item>
       </ion-toolbar>
+      <ion-item color="light" v-show="(mostrarPedido != '')">
+        <ion-label class="ion-text-wrap" ion-fixed > 📌 {{mostrarPedido}} </ion-label>
+      </ion-item>
     </ion-header>
 
     <ion-content :fullscreen="true">
@@ -32,9 +35,6 @@
           <ion-label>Cliente: </ion-label>
           <ion-input @click="$event.target.value = nombre" @IonInput="nombre=$event.target.value.toString()">
           </ion-input>
-        </ion-item>
-        <ion-item color="light">
-        <ion-label class="ion-text-wrap" ion-fixed > Pedido: {{mostrarPedido}}</ion-label>
         </ion-item>
         <br>
         <ion-title>TOTAL: {{total}} bs</ion-title>
