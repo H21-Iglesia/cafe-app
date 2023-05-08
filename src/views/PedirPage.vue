@@ -202,7 +202,7 @@ export default defineComponent({
       for (var i = 0; i < Object.entries(this.productos).length; i++) {
 
         if (this.productos[i].cantidad > 0) {
-          suma = suma + ((this.productos[i].cantidad) * parseInt(this.productos[i].costo))
+          suma = suma + ((this.productos[i].cantidad) * parseFloat(this.productos[i].costo))
         }
         if (this.productos[i].cantidad > 0) {
           for (let index = 0; index < this.productos[i].cantidad; index++) {

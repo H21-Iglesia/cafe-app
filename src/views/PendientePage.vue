@@ -23,8 +23,8 @@
           <ion-accordion v-if="estado != 2 ? Pedido.estado_id != 2 && ((hoy.toLocaleDateString()) == convertirFecha(Pedido.created_at).toLocaleDateString()): true">
 
             <ion-item slot="header" value="first" color="light">
-              <ion-card-header>
-                <ion-card-title color="dark">#{{Pedido.id + " - "+ (Pedido.nombre_cliente? Pedido.nombre_cliente:"Pedido") }} <ion-badge color="danger" v-show="!Pedido.pagado" >DEUDA</ion-badge> </ion-card-title>           
+              <ion-card-header>        
+                <ion-card-title color="dark">#{{Pedido.id + " - "+ (Pedido.nombre_cliente? Pedido.nombre_cliente:"Pedido") }} <ion-badge color="danger" v-show="!Pedido.pagado" >DEUDA</ion-badge> </ion-card-title>                       
               </ion-card-header>
             </ion-item>
 
@@ -49,23 +49,32 @@
                 </ion-item>
 
               </ion-item-sliding>
+              
               <ion-item-sliding v-for="(detalle, index) in Pedido.pedido_detalle " :key="index" :disabled="true">
-
                 <ion-item color="medium" v-if="detalle.completado">
-                  <ion-checkbox color="warning" slot="start" :checked="detalle.completado" :disabled="true">
+                  <ion-checkbox color="warning"  :checked="detalle.completado" :disabled="true">
                   </ion-checkbox>
 
                   <ion-label class="ion-text-wrap">{{detalle.producto.nombre }}</ion-label>
                   <!-- <ion-select :selectedText=detalle.preparo :disabled="true">
                   </ion-select> -->
                 </ion-item>
-
-              </ion-item-sliding>
+              </ion-item-sliding>                        
               <br>
               <ion-button color="danger" expand="block" v-if="Pedido.pagado == 0" @click="Pedido.pagado = 1; GuardarPedido(Pedido);">
-                PAGAR DEUDA</ion-button>
+                PAGAR DEUDA
+              </ion-button>
               <ion-button color="warning" expand="block" v-if="estado == 1" @click="Pedido.estado_id = 2; GuardarPedido(Pedido); publishSocket(Pedido.id);">
-                PEDIDO COMPLETADO</ion-button>
+                PEDIDO COMPLETADO
+              </ion-button>
+              <ion-grid>
+                <ion-row class="ion-text-center">
+                  <ion-col>
+                    <ion-label> {{convertirFecha(Pedido.created_at).toLocaleDateString('es-ES', {day: 'numeric', month: 'long'})}}</ion-label> -
+                    <ion-label> subtotal: {{ subTotal(Pedido.pedido_detalle) }} bs</ion-label>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
             </ion-card-content>
 
           </ion-accordion>
@@ -93,7 +102,7 @@
 import {
   IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonButtons, IonItem, IonLabel, IonCard, IonCardContent, IonCardHeader,
   IonCardTitle, IonItemOption, IonItemOptions, IonItemSliding, IonRefresher, IonRefresherContent, IonAccordion,
-  IonAccordionGroup, IonCheckbox, IonSegment, IonSegmentButton,IonFooter,toastController,IonBadge
+  IonAccordionGroup, IonCheckbox, IonSegment, IonSegmentButton,IonFooter,toastController,IonBadge,IonGrid,IonRow,IonCol
   //IonSelect, IonSelectOption,
 } from '@ionic/vue';
 import { defineComponent } from 'vue';
@@ -186,9 +195,16 @@ export default defineComponent({
       const hoy = new Date(tiempoTranscurrido);
       this.hoy = hoy
     },
-    convertirFecha(fecha){
+    convertirFecha(fecha: string){
       const fechanueva = new Date(fecha)
       return fechanueva
+    },
+    subTotal(detalle: any){
+      let subtotal = 0;
+      for (let i = 0; i < detalle.length; i++) {
+        subtotal += detalle[i].producto.costo;    
+      }
+      return subtotal
     }
 
 
@@ -198,7 +214,7 @@ export default defineComponent({
   },
   components: {
     IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton, IonButtons, IonItem, IonLabel, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonItemOption, IonItemOptions, IonItemSliding
-    , IonRefresher, IonRefresherContent, IonAccordion, IonAccordionGroup, IonCheckbox,IonSegment, IonSegmentButton,IonFooter,IonBadge
+    , IonRefresher, IonRefresherContent, IonAccordion, IonAccordionGroup, IonCheckbox,IonSegment, IonSegmentButton,IonFooter,IonBadge,IonGrid,IonRow,IonCol
     //IonSelect, IonSelectOption
   }
 });
