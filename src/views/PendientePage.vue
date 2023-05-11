@@ -19,8 +19,9 @@
 
       <ion-card class="cards">
 
+        <!-- Pendientes hoy dia -->
         <ion-accordion-group v-for="(Pedido, index) in pedidos" :key="index">
-          <ion-accordion v-if="estado != 2 ? Pedido.estado_id != 2 && ((hoy.toLocaleDateString()) == convertirFecha(Pedido.created_at).toLocaleDateString()): true">
+          <ion-accordion v-if="pestaña == 1 ? Pedido.estado_id == 1 && ((hoy.toLocaleDateString()) == convertirFecha(Pedido.created_at).toLocaleDateString()): false">
 
             <ion-item slot="header" value="first" color="light">
               <ion-card-header>        
@@ -80,16 +81,82 @@
           </ion-accordion>
         </ion-accordion-group>
 
+        <!--  Todos por mes -->
+        <div v-if="pestaña == 2">
+          <ion-accordion-group v-for="(Mes, index) in pedidosPorMes" :key="index">
+            <ion-accordion>
+              <!-- Header-->
+              <ion-item slot="header" color="warning">
+                <ion-label style="font-size: 20px; margin: 10px;" >{{Mes.mes}}</ion-label>
+              </ion-item>
+              <!-- Contenido-->
+              <ion-accordion-group slot="content" v-for="(Pedido, index) in Mes.pedidos" :key="index">         
+                <ion-accordion>
+
+                  <ion-item slot="header" value="first" color="light">
+                    <ion-card-header>        
+                      <ion-card-title color="dark">#{{Pedido.id + " - "+ (Pedido.nombre_cliente? Pedido.nombre_cliente:"Pedido") }} <ion-badge color="danger" v-show="!Pedido.pagado" >DEUDA</ion-badge> </ion-card-title>                       
+                    </ion-card-header>
+                  </ion-item>
+
+                  <ion-card-content slot="content" mode="md">
+                    <ion-item-sliding v-for="(detalle, index) in Pedido.pedido_detalle " :key="index">
+                      <ion-item-options side="end">
+                        <ion-item-option @click="(detalle.completado = true); GuardarProducto(detalle);">LISTO
+                        </ion-item-option>
+                      </ion-item-options>
+
+                      <ion-item v-show="detalle.completado == false">
+                        <ion-checkbox color="warning" slot="start" :checked="detalle.completado"
+                          @click="(detalle.completado = true); GuardarProducto(detalle);"></ion-checkbox>
+
+                        <ion-label class="ion-text-wrap">{{detalle.producto.nombre }}</ion-label>
+                      </ion-item>
+
+                    </ion-item-sliding>
+                    
+                    <ion-item-sliding v-for="(detalle, index) in Pedido.pedido_detalle " :key="index" :disabled="true">
+                      <ion-item color="medium" v-if="detalle.completado">
+                        <ion-checkbox color="warning"  :checked="detalle.completado" :disabled="true">
+                        </ion-checkbox>
+
+                        <ion-label class="ion-text-wrap">{{detalle.producto.nombre }}</ion-label>
+                      </ion-item>
+                    </ion-item-sliding>                        
+                    <br>
+                    <ion-button color="danger" expand="block" v-if="Pedido.pagado == 0" @click="Pedido.pagado = 1; GuardarPedido(Pedido);">
+                      PAGAR DEUDA
+                    </ion-button>
+                    <ion-grid>
+                      <ion-row class="ion-text-center">
+                        <ion-col>
+                          <ion-label> {{convertirFecha(Pedido.created_at).toLocaleDateString('es-ES', {day: 'numeric', month: 'long'})}}</ion-label> -
+                          <ion-label> subtotal: {{ subTotal(Pedido.pedido_detalle) }} bs</ion-label>
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid>
+                  </ion-card-content>
+
+                </ion-accordion>
+              </ion-accordion-group>
+            </ion-accordion>  
+            
+          </ion-accordion-group>
+        </div>
+        
+                 
+    
       </ion-card>
+      
 
     </ion-content>
     <ion-footer mode="md">
       <ion-toolbar color="light">
         <ion-segment value="default" color="warning">
-          <ion-segment-button value="default" @click="estado = 1">
+          <ion-segment-button value="default" @click="pestaña = 1">
             <ion-label>Pendientes</ion-label>
           </ion-segment-button>
-          <ion-segment-button value="segment" @click="estado = 2">
+          <ion-segment-button value="segment" @click="pestaña = 2">
             <ion-label>Todos</ion-label>
           </ion-segment-button>
         </ion-segment>
@@ -130,9 +197,11 @@ export default defineComponent({
       pedidos: null,
       trabajadores: [{ nombre: 'Lucas' }, { nombre: 'Sarah Mendez' }, { nombre: 'Emily' }, { nombre: 'Mateo' }, { nombre: 'Nicol' }, { nombre: 'Gabriel' }, { nombre: 'Andrea' }, { nombre: 'Alejandra' }, { nombre: 'Sarah Antelo' }, { nombre: 'Alvaro' }, { nombre: 'Tammy' }],
       pedidocopia: null,
-      estado: 1, 
+      estado: 1,
+      pestaña: 1, 
       sound: null,
-      hoy:null    
+      hoy:null,
+      pedidosPorMes: null    
     }
   },
   methods: {
@@ -156,7 +225,8 @@ export default defineComponent({
       ApiService.actualizar('pedidoProducto', detalle.id, detalle)
     },
     async obtenerPedidosApi() {
-      this.pedidos = await ApiService.obtener('pedido')
+      this.pedidos = (await ApiService.obtener('pedido')).reverse()
+      this.AgruparPedidosPorMes();
     },
     async suscribeSocketPedidos(){
       const channel = ably.channels.get('pedidos');
@@ -205,6 +275,31 @@ export default defineComponent({
         subtotal += detalle[i].producto.costo;    
       }
       return subtotal
+    },
+    AgruparPedidosPorMes(){
+      let pedidos = this.pedidos;
+
+      // Agregar propiedad de fecha al objeto
+      pedidos.forEach(pedido => {
+        pedido.fecha = new Date(pedido.created_at);
+      });
+
+      // Agrupar los pedidos por mes en un objeto
+      const pedidosPorMes = pedidos.reduce((obj, pedido) => {
+        const fecha = new Date(pedido.created_at);
+        const mes = `${fecha.getMonth() + 1}-${fecha.getFullYear()}`;
+        if (!obj[mes]) {
+          obj[mes] = {
+            mes,
+            pedidos: []
+          };
+        }
+        obj[mes].pedidos.push(pedido);
+        return obj;
+      }, {});
+
+      this.pedidosPorMes = pedidosPorMes
+      console.log(pedidosPorMes);
     }
 
 
