@@ -20,6 +20,7 @@
       <ion-card class="cards">
 
         <!-- Pendientes hoy dia -->
+        <div v-if="pestaña == 1">
         <ion-accordion-group v-for="(Pedido, index) in pedidos" :key="index">
           <ion-accordion v-if="pestaña == 1 ? Pedido.estado_id == 1 && ((hoy.toLocaleDateString()) == convertirFecha(Pedido.created_at).toLocaleDateString()): false">
 
@@ -77,10 +78,12 @@
 
           </ion-accordion>
         </ion-accordion-group>
+        </div>
 
         <!--  Todos completados hoy dia -->
-        <ion-accordion-group v-for="(Pedido, index) in pedidos" :key="index">
-          <ion-accordion v-if="pestaña == 2 ? Pedido.estado_id == 2  && ((hoy.toLocaleDateString()) == convertirFecha(Pedido.created_at).toLocaleDateString()): false">
+        <div v-else-if="pestaña == 2">
+        <ion-accordion-group v-for="(Pedido, index) in pedidos.filter(Pedido => Pedido.estado_id == 2 && ((hoy.toLocaleDateString()) == convertirFecha(Pedido.created_at).toLocaleDateString()))" :key="index">
+          <ion-accordion>
 
             <ion-item slot="header" value="first" color="light">
               <ion-card-header>        
@@ -129,11 +132,12 @@
 
           </ion-accordion>
         </ion-accordion-group>
+        </div>
 
         <!--  Todos Deuda -->
-        <div v-if="pestaña == 3">
-        <ion-accordion-group v-for="(Pedido, index) in pedidos" :key="index">
-          <ion-accordion v-if=" Pedido.pagado == 0">
+        <div v-else-if="pestaña == 3">
+        <ion-accordion-group v-for="(Pedido, index) in pedidos.filter(Pedido => Pedido.pagado == 0)" :key="index">
+          <ion-accordion>
 
             <ion-item slot="header" value="first" color="light">
               <ion-card-header>        
@@ -185,7 +189,7 @@
         </div>
 
         <!--  Todos por mes -->
-        <div v-if="pestaña == 4">
+        <div v-else-if="pestaña == 4" >
           <ion-accordion-group v-for="(Mes, index) in pedidosPorMes" :key="index">
             <ion-accordion>
               <!-- Header-->
@@ -193,8 +197,9 @@
                 <ion-label style="font-size: 20px; margin: 10px;" >{{ConvertirMesAnio(Mes.mes)}}</ion-label>
               </ion-item>
               <!-- Contenido-->
+
               <ion-accordion-group slot="content" v-for="(Pedido, index) in Mes.pedidos" :key="index">         
-                <ion-accordion>
+                <ion-accordion >
 
                   <ion-item slot="header" value="first" color="light">
                     <ion-card-header>        
@@ -302,7 +307,8 @@ export default defineComponent({
       pestaña: 1, 
       sound: null,
       hoy:null,
-      pedidosPorMes: null    
+      pedidosPorMes: null,
+      MesSeleccionado: "3-2023"    
     }
   },
   methods: {
@@ -386,21 +392,23 @@ export default defineComponent({
         pedido.fecha = new Date(pedido.created_at);
       });
 
-      // Agrupar los pedidos por mes en un objeto
-      const pedidosPorMes = pedidos.reduce((obj, pedido) => {
+      // Agrupar los pedidos por mes en un array de objetos
+      const pedidosPorMes = pedidos.reduce((arr, pedido) => {
         const fecha = new Date(pedido.created_at);
         const mes = `${fecha.getMonth() + 1}-${fecha.getFullYear()}`;
-        if (!obj[mes]) {
-          obj[mes] = {
+        const mesExistente = arr.find(obj => obj.mes === mes);
+        if (mesExistente) {
+          mesExistente.pedidos.push(pedido);
+        } else {
+          arr.push({
             mes,
-            pedidos: []
-          };
+            pedidos: [pedido]
+          });
         }
-        obj[mes].pedidos.push(pedido);
-        return obj;
-      }, {});
+        return arr;
+      }, []);
 
-      this.pedidosPorMes = pedidosPorMes
+      this.pedidosPorMes = pedidosPorMes;
     },
     ConvertirMesAnio(fecha: string){
       const fechaArray = fecha.split("-"); // ["5", "2023"]
