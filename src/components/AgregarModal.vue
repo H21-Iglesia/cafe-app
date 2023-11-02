@@ -19,6 +19,10 @@
         <ion-label position="stacked">Precio</ion-label>
         <ion-input v-model="costo" placeholder="Costo del producto" type="number"></ion-input>
       </ion-item>
+      <ion-item>
+        <ion-label position="stacked">Stock</ion-label>
+        <ion-input v-model="stock" placeholder="Cantidad total de stock" type="number"></ion-input>
+      </ion-item>
       <ion-item disabled>
         <ion-label position="stacked">Receta</ion-label>
         <ion-input v-model="receta_id" placeholder="selecionar receta"></ion-input>
@@ -70,6 +74,7 @@
         return{
             nombre:"",
             costo:0,
+            stock:-1,
             receta_id:1,
             foto:null,
             imagenSeleccionada:null,
@@ -97,7 +102,7 @@
           return modalController.dismiss(null, 'cancel');
         },
         confirm() {
-          return modalController.dismiss({nombre:this.nombre,costo:this.costo,receta_id:this.receta_id,foto:this.foto,cantidad:0,categorias:this.categoriasSelect}, 'confirm');
+          return modalController.dismiss({nombre:this.nombre,costo:this.costo,stock:this.stock,receta_id:this.receta_id,foto:this.foto,cantidad:0,categorias:this.categoriasSelect}, 'confirm');
         },
         async traerCategorias(){
           const categorias = await ApiService.obtener('categoria')

@@ -22,6 +22,10 @@
           <ion-label  color="warning">Precio:</ion-label>
         </ion-item-divider>
         <ion-input v-model="costo" placeholder="Costo del producto" type="number"></ion-input>
+        <ion-item-divider>
+          <ion-label  color="warning">Stock:</ion-label>
+        </ion-item-divider>
+        <ion-input v-model="stock" placeholder="Cantidad total de stock" type="number"></ion-input>
         <ion-item-divider >
           <ion-label color="warning">Categorias:</ion-label>
         </ion-item-divider>
@@ -99,6 +103,7 @@
             id:this.producto.id,
             nombre:this.producto.nombre,
             costo:this.producto.costo,
+            stock:this.producto.stock,
             receta_id:this.producto.receta_id,
             foto:this.producto.foto,
             imagenSeleccionada:null,
@@ -129,7 +134,7 @@
           return modalController.dismiss(null, 'cancel');
         },
         confirm() {
-          return modalController.dismiss({id:this.id,nombre:this.nombre,costo:this.costo,receta_id:this.receta_id,foto:this.foto,categorias:this.categoriasSelect}, 'confirm');
+          return modalController.dismiss({id:this.id,nombre:this.nombre,costo:this.costo,stock:this.stock,receta_id:this.receta_id,foto:this.foto,categorias:this.categoriasSelect}, 'confirm');
         },
         eliminarCategoria(id: string){
           ApiService.eliminar("categoriaProducto",id)

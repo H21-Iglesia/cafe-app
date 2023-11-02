@@ -9,39 +9,43 @@
         </ion-buttons>
         <ion-title slot="end">CREAR PEDIDO</ion-title>
         <ion-item color="primary">
-          <ion-input placeholder="Buscar" ref="myInput" autofocus @IonInput="BuscarProductosFiltro($event.target.value.toString())" @click="$event.target.value = '';BuscarProductosFiltro('') " >
+          <ion-input placeholder="Buscar" ref="myInput" autofocus
+            @IonInput="BuscarProductosFiltro($event.target.value.toString())"
+
+          >
           </ion-input>
         </ion-item>
       </ion-toolbar>
-      <ion-item color="light" v-show="(mostrarPedido != '')">
-        <ion-label class="ion-text-wrap" ion-fixed > 📌 {{mostrarPedido}} </ion-label>
-      </ion-item>
+
     </ion-header>
 
     <ion-content :fullscreen="true">
 
-      <ion-list >
-        <div v-for="producto in productosfiltrados" :key="producto.id" >
-          <item-producto  class="list" @cantidad="productos[producto.id].cantidad=$event" :p="producto"></item-producto>
+      <ion-list>
+        <div v-for="producto in productosfiltrados" :key="producto.id">
+          <item-producto class="list" @cantidad="productos[producto.id].cantidad = $event" :p="producto"></item-producto>
         </div>
       </ion-list>
 
     </ion-content>
 
     <ion-footer mode="md">
-      <ion-toolbar color="light">
 
+      <ion-toolbar color="light">
+        <ion-item color="light" v-show="(mostrarPedido != '')">
+          <ion-label class="ion-text-wrap" ion-fixed> 📌 {{ mostrarPedido }} </ion-label>
+        </ion-item>
         <ion-item color="light">
           <ion-label>Cliente: </ion-label>
-          <ion-input @click="$event.target.value = nombre" @IonInput="nombre=$event.target.value.toString()">
+          <ion-input @click="$event.target.value = nombre" @IonInput="nombre = $event.target.value.toString()">
           </ion-input>
         </ion-item>
         <br>
-        <ion-title>TOTAL: {{total}} bs</ion-title>
+        <ion-title>TOTAL: {{ total }} bs</ion-title>
         <br>
         <ion-buttons class="botones">
           <ion-button fill="solid" class="pedir" shape="round" color="warning" @click="Pedir2(true)">PEDIR</ion-button>
-          <ion-button  fill="solid" class="deuda" shape="round" color="tertiary" @click="Pedir2(false)">DEUDA</ion-button>
+          <ion-button fill="solid" class="deuda" shape="round" color="tertiary" @click="Pedir2(false)">DEUDA</ion-button>
         </ion-buttons>
 
       </ion-toolbar>
@@ -50,13 +54,14 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonList, IonPage, IonTitle, IonToolbar, toastController, IonButton, IonButtons, IonFooter, IonItem, IonInput, IonLabel} from '@ionic/vue';
+import { IonContent, IonHeader, IonList, IonPage, IonTitle, IonToolbar, toastController, IonButton, IonButtons, IonFooter, IonItem, IonInput, IonLabel } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import ItemProducto from '@/components/ItemProducto.vue'
 import { arrowBackOutline } from "ionicons/icons";
 import { ApiService } from '../data/Services/ApiService';
 import { Orden } from '../data/orden';
-import {ably} from "../data/Services/SocketService"
+import { Producto } from '../data/Producto';
+import { ably } from "../data/Services/SocketService"
 
 export default defineComponent({
   name: 'PedirPage',
@@ -77,9 +82,9 @@ export default defineComponent({
       pedidos: [],
       NroOrden: 0,
       pedidosRutas: "pedidos",
-      productosfiltrados:null,
+      productosfiltrados: null,
       inputValue: '',
-  
+
     }
   },
   methods: {
@@ -118,7 +123,7 @@ export default defineComponent({
         return toast.present();
       }
     },
-    async Pedir2(pagado:boolean) {
+    async Pedir2(pagado: boolean) {
       if (this.total <= 0) {
         return this.Notificar("No hay productos selecionados")
       }
@@ -133,16 +138,16 @@ export default defineComponent({
       this.pedido = pedido
 
     },
-    GuardarPedidoApi(pagado:boolean) {
+    GuardarPedidoApi(pagado: boolean) {
 
       let orden = new Orden();
 
-      orden.productos = this.pedido.map(function (producto) {
+      orden.productos = this.pedido.map( (producto:Producto) => {
         return producto.id
       })
 
       orden.nombre_cliente = this.nombre
-      orden.pagado =  pagado
+      orden.pagado = pagado
 
       this.NroOrden++
 
@@ -172,21 +177,21 @@ export default defineComponent({
       this.productos = await ApiService.obtener('producto')
       this.productosfiltrados = this.productos
     },
-    BuscarProductosFiltro(texto){
-      if(texto){
-        this.productosfiltrados = this.productos.filter(item =>{    
+    BuscarProductosFiltro(texto) {
+      if (texto) {
+        this.productosfiltrados = this.productos.filter(item => {
           let itemtexto = (item.nombre).toUpperCase()
           return itemtexto.indexOf(texto.toUpperCase()) > -1;
         })
-      }else{
+      } else {
         this.productosfiltrados = this.productos;
       }
     },
-    async publishSocket(){
+    async publishSocket() {
       const channel = ably.channels.get('pedidos');
       await channel.publish('comida', 'Nuevo pedido');
     },
-    FocusBuscar(){
+    FocusBuscar() {
       this.$nextTick(() => {
         const input = (this.$refs.myInput as InstanceType<typeof IonInput>).$el.querySelector('input') as HTMLInputElement;
         if (input) {
@@ -214,14 +219,14 @@ export default defineComponent({
 
       return suma
     },
-    mostrarPedido(){
+    mostrarPedido() {
       let pedidolista = []
       let pedidolistaConCantidad = []
 
       for (let i = 0; i < this.pedido.length; i++) {
-        if(!pedidolista.includes(this.pedido[i].nombre)){
+        if (!pedidolista.includes(this.pedido[i].nombre)) {
           pedidolista.push(this.pedido[i].nombre)
-          pedidolistaConCantidad.push(( ' '+ this.pedido[i].cantidad + ' '+  this.pedido[i].nombre))
+          pedidolistaConCantidad.push((' ' + this.pedido[i].cantidad + ' ' + this.pedido[i].nombre))
         }
       }
 
@@ -242,7 +247,7 @@ export default defineComponent({
     IonItem,
     IonInput,
     IonLabel,
-    
+
   },
 });
 </script>
@@ -250,19 +255,26 @@ export default defineComponent({
 .input {
   background-color: rgb(196, 196, 196);
 }
-.list{
-  max-width:100%
+
+.list {
+  max-width: 100%
 }
-.pedir{
+
+.pedir {
   min-width: 70%;
   height: 40px;
 }
-.deuda{
+
+.deuda {
   width: 100%;
   height: 40px;
 }
-.botones{
+
+.botones {
   height: 50px;
 }
 
+.pedidoActual {
+  position: absolute;
+}
 </style>

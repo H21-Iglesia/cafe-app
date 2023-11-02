@@ -17,7 +17,8 @@
                 <ion-thumbnail slot="start"   >
                     <img class="imagen" :src="'https://apicafe.h21iglesia.org/images/'+ producto.foto" alt="">
                 </ion-thumbnail>
-                <ion-label class="ion-text-wrap">{{producto.nombre}}</ion-label>
+                <ion-label class="ion-text-wrap">{{producto.nombre}} <IonBadge color="warning">{{producto.stock}}</IonBadge></ion-label>
+                
                 <ion-button @click="AbrirEditarModal(producto)" color="tertiary">Editar</ion-button>
             </ion-item>
         </div>
@@ -25,13 +26,13 @@
     </ion-content>
     <ion-footer mode="md">
       <ion-toolbar color="light">
-        <ion-button expand="block" shape="round" color="warning" @click="AbrirAgregarModal" >Agregar</ion-button>
+        <ion-button expand="block" shape="round" color="warning" @click="AbrirAgregarModal" >Crear nuevo producto</ion-button>
       </ion-toolbar>
     </ion-footer>
     </ion-page>
 </template>
 <script lang="ts">
-import { IonButton,IonItem, IonLabel,IonHeader,IonToolbar,IonContent,IonPage,IonButtons,IonFooter,IonThumbnail,modalController} from '@ionic/vue';
+import { IonButton,IonItem, IonLabel,IonHeader,IonToolbar,IonContent,IonPage,IonButtons,IonFooter,IonThumbnail,modalController,IonBadge} from '@ionic/vue';
 import { defineComponent } from 'vue';
 import { arrowBackOutline,createOutline } from "ionicons/icons";
 import { ApiService } from '../data/Services/ApiService';
@@ -42,7 +43,7 @@ export default defineComponent( {
     name: 'ProductosPage',
     components:{
         // IonButton,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle,
-        IonItem, IonLabel,IonHeader,IonToolbar,IonContent,IonPage, IonButton, IonButtons,IonFooter,IonThumbnail
+        IonItem, IonLabel,IonHeader,IonToolbar,IonContent,IonPage, IonButton, IonButtons,IonFooter,IonThumbnail,IonBadge
     },
     mounted(){
         this.TraerProductos()
@@ -72,6 +73,7 @@ export default defineComponent( {
 
           fd.append('foto',data.foto)
           fd.append('nombre',data.nombre)
+          fd.append('stock',data.stock)
           fd.append('costo',data.costo)
           fd.append('receta_id',data.receta_id)
           fd.append('categorias', JSON.stringify(data.categorias))
@@ -95,6 +97,7 @@ export default defineComponent( {
           fd.append('id',data.id)
           fd.append('nombre',data.nombre)
           fd.append('costo',data.costo)
+          fd.append('stock',data.stock)
           fd.append('receta_id',data.receta_id)
           fd.append('foto',data.foto)
           fd.append('categorias', JSON.stringify(data.categorias))
