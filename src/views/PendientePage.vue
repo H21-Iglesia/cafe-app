@@ -82,7 +82,7 @@
 
         <!--  Todos completados hoy dia -->
         <div v-else-if="pestaña == 2">
-        <ion-accordion-group v-for="(Pedido, index) in pedidos.filter(Pedido => Pedido.estado_id == 2 && ((hoy.toLocaleDateString()) == convertirFecha(Pedido.created_at).toLocaleDateString()))" :key="index">
+        <ion-accordion-group v-for="(Pedido, index) in pedidosHoy.filter(Pedido => Pedido.estado_id == 2)" :key="index">
           <ion-accordion>
 
             <ion-item slot="header" value="first" color="light">
@@ -136,7 +136,7 @@
 
         <!--  Todos Deuda -->
         <div v-else-if="pestaña == 3">
-        <ion-accordion-group v-for="(Pedido, index) in pedidos.filter(Pedido => Pedido.pagado == 0)" :key="index">
+        <ion-accordion-group v-for="(Pedido, index) in pedidosDeudores" :key="index">
           <ion-accordion>
 
             <ion-item slot="header" value="first" color="light">
@@ -288,6 +288,7 @@ export default defineComponent({
   name: 'PendientePage',
   
   mounted() {
+    this.obtenerFecha()
     this.obtenerPedidosApi()
     this.suscribeSocketPedidos()
     this.suscribeSocketCompletados()
@@ -295,12 +296,15 @@ export default defineComponent({
                     src: ['https://apicafe.h21iglesia.org/sounds/pristine-609.mp3'],
                     html5: true
                 });
-    this.obtenerFecha()
+
   },
   data() {
     return {
       arrowBackOutline,
       pedidos: null,
+      pedidosDeudores: null,
+      pedidosPendientes:null,
+      pedidosHoy:null,
       trabajadores: [{ nombre: 'Lucas' }, { nombre: 'Sarah Mendez' }, { nombre: 'Emily' }, { nombre: 'Mateo' }, { nombre: 'Nicol' }, { nombre: 'Gabriel' }, { nombre: 'Andrea' }, { nombre: 'Alejandra' }, { nombre: 'Sarah Antelo' }, { nombre: 'Alvaro' }, { nombre: 'Tammy' }],
       pedidocopia: null,
       estado: 1,
@@ -333,8 +337,21 @@ export default defineComponent({
       ApiService.actualizar('pedidoProducto', detalle.id, detalle)
     },
     async obtenerPedidosApi() {
-      this.pedidos = (await ApiService.obtener('pedido')).reverse()
+      this.pedidos = (await ApiService.obtener('pedido?top=500')).reverse()
       this.AgruparPedidosPorMes();
+
+      this.obtenerPedidosConDeudaApi()
+      this.obtenerPedidosPendientesApi()
+      this.obtenerPedidosdeHoy()
+    },
+    async obtenerPedidosConDeudaApi() {
+      this.pedidosDeudores = (await ApiService.obtener('pedido/deudas/todos')).reverse()
+    },
+    async obtenerPedidosPendientesApi() {
+      this.pedidosPendientes = (await ApiService.obtener(`pedido/hoy/pendientes`))
+    },
+    async obtenerPedidosdeHoy() {
+      this.pedidosHoy = (await ApiService.obtener('pedido/hoy/todos')).reverse()
     },
     async suscribeSocketPedidos(){
       const channel = ably.channels.get('pedidos');
