@@ -43,45 +43,60 @@
 
 </template>
 <script lang="ts">
-import { cartOutline,timeOutline,colorWandOutline,bagAddOutline } from "ionicons/icons";
-import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle,IonItem, IonLabel,IonHeader,IonToolbar,IonContent,IonPage,IonNavLink,IonFooter} from '@ionic/vue';
+import { cartOutline, timeOutline, colorWandOutline, bagAddOutline } from "ionicons/icons";
+import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle,toastController, IonCardTitle, IonItem, IonLabel, IonHeader, IonToolbar, IonContent, IonPage, IonNavLink, IonFooter } from '@ionic/vue';
 import { defineComponent } from 'vue';
-import {ably} from "../data/Services/SocketService"
+import { ably } from "../data/Services/SocketService"
 
-export default defineComponent( {
+export default defineComponent({
     name: 'HomePage',
-    components:{
-        IonButton,IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle,IonItem, IonLabel,IonHeader,IonToolbar,IonContent,IonPage,IonNavLink,IonFooter
+    components: {
+        IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonItem, IonLabel, IonHeader, IonToolbar, IonContent, IonPage, IonNavLink, IonFooter
     },
     mounted() {
         this.ConectarSocket()
+        ably.connection.on((stateChange) => {
+            console.log('New connection state is ' + stateChange.current);
+            this.Notificar(stateChange.current,1500);
+        });
     },
     unmounted() {
-        ably.close(); 
+        ably.close();
     },
     data() {
         return {
-            cartOutline,timeOutline,colorWandOutline,bagAddOutline
+            cartOutline, timeOutline, colorWandOutline, bagAddOutline
         }
     },
     methods: {
-        async ConectarSocket(){            
+        async ConectarSocket() {
             await ably.connection.once('connected');
         },
-        
+        async Notificar(mensaje: string, duracion = 1000) {
+            const toast = await toastController
+                .create({
+                    message: mensaje,
+                    duration: duracion,
+                    position: "bottom",
+                    color: 'warning'
+                })
+            return toast.present();
+        },
+
     },
 })
 </script>
 <style scoped>
-.iconos{
+.iconos {
     display: box;
     justify-content: center;
     text-align: center;
 }
-.creditos{
+
+.creditos {
     display: flex;
     text-align: center;
     align-items: center;
-    justify-content: center;  
-}    
+    justify-content: center;
+}
 </style>
